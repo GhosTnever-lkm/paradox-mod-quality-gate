@@ -1,0 +1,115 @@
+name: Paradox Mod Quality Gate
+description: Run two Paradox mod scanners, annotate findings, summarize and upload reports only.
+author: GhosTnever
+inputs:
+  mod-path:
+    description: Mod folder or ZIP path relative to the workspace.
+    required: false
+    default: .
+  workbench-paths:
+    description: Optional newline-separated list of folders or ZIPs for pack comparison.
+    required: false
+    default: ''
+  gate:
+    description: Fail on error, warning, or never for findings.
+    required: false
+    default: error
+  python-version:
+    description: Python version.
+    required: false
+    default: '3.12'
+  artifact-name:
+    description: Name for report-only artifact.
+    required: false
+    default: paradox-mod-quality-report
+outputs:
+  json-report:
+    description: Unified JSON report path.
+    value: ${{ steps.report.outputs.json }}
+  markdown-report:
+    description: Unified Markdown report path.
+    value: ${{ steps.report.outputs.markdown }}
+runs:
+  using: composite
+  steps:
+    - name: Validate inputs
+      shell: bash
+      env:
+        GATE: ${{ inputs.gate }}
+      run: |
+        case "$GATE" in error|warning|never) ;; *) echo "gate must be error, warning, or never" >&2; exit 2;; esac
+    - name: Set up Python
+      uses: actions/setup-python@v7
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Install pinned scanners
+      shell: bash
+      run: |
+        python -m pip install --disable-pip-version-check \
+          "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.2.1" \
+          "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.1"
+    - name: Prepare reports
+      id: report
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/pmqg-reports"
+        echo "json=$RUNNER_TEMP/pmqg-reports/report.json" >> "$GITHUB_OUTPUT"
+        echo "markdown=$RUNNER_TEMP/pmqg-reports/report.md" >> "$GITHUB_OUTPUT"
+    - name: Run scanners and aggregate findings
+      id: scan
+      shell: bash
+      env:
+        MOD_PATH: ${{ inputs.mod-path }}
+        WORKBENCH_PATHS: ${{ inputs.workbench-paths }}
+        GATE: ${{ inputs.gate }}
+        REPORT_DIR: ${{ runner.temp }}/pmqg-reports
+      run: |
+        python - "$GITHUB_ACTION_PATH" <<'PY'
+        import os, subprocess, sys
+        from pathlib import Path
+        action = Path(sys.argv[1])
+        root = Path(os.environ["GITHUB_WORKSPACE"]).resolve()
+        out = Path(os.environ["REPORT_DIR"])
+        mod_path = (root / os.environ["MOD_PATH"]).resolve()
+        try:
+            mod_path.relative_to(root)
+        except ValueError:
+            raise SystemExit("mod-path must stay inside GITHUB_WORKSPACE")
+        if not mod_path.exists():
+            raise SystemExit("mod-path does not exist")
+        paths_text = os.environ.get("WORKBENCH_PATHS", "").strip()
+        sources = [root / p.strip() for p in paths_text.splitlines() if p.strip()] or [mod_path]
+        resolved = []
+        for path in sources:
+            item = path.resolve()
+            try:
+                item.relative_to(root)
+            except ValueError:
+                raise SystemExit("workbench path must stay inside GITHUB_WORKSPACE")
+            if not item.exists():
+                raise SystemExit("workbench path does not exist")
+            resolved.append(str(item))
+        mod_json, mod_md, pmw_json = out / "modrelease.json", out / "modrelease.md", out / "workbench.json"
+        runs = [
+            (["modrelease", "scan", str(mod_path), "--json-out", str(mod_json), "--md-out", str(mod_md)], {0, 1}, mod_json),
+            (["pmw", "scan", *resolved, "--format", "json", "--output", str(pmw_json), "--fail-on", "never"], {0}, pmw_json),
+        ]
+        for command, expected, report in runs:
+            result = subprocess.run(command, cwd=root, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+            if result.returncode not in expected or not report.is_file():
+                print("Scanner failed before creating a usable report; check the inputs and scanner versions.", file=sys.stderr)
+                raise SystemExit(2)
+        sys.path.insert(0, str(action / "runner"))
+        from aggregate import main
+        status = main(["--modrelease", str(mod_json), "--workbench", str(pmw_json),
+                       "--json-out", str(out / "report.json"), "--md-out", str(out / "report.md"),
+                       "--gate", os.environ["GATE"], "--github"])
+        raise SystemExit(status)
+        PY
+    - name: Upload unified reports
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ runner.temp }}/pmqg-reports/report.*
+        if-no-files-found: ignore
