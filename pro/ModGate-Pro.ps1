@@ -67,7 +67,7 @@ $addZip.Add_Click({
   if ($dialog.ShowDialog() -eq 'OK') { foreach ($item in $dialog.FileNames) { if (-not $list.Items.Contains($item)) { [void]$list.Items.Add($item) } } }
 })
 $remove.Add_Click({ while ($list.SelectedItems.Count -gt 0) { $list.Items.Remove($list.SelectedItems[0]) } })
-$open.Add_Click({ Start-Process explorer.exe -ArgumentList @($outRoot) })
+$open.Add_Click({ Invoke-Item -LiteralPath $outRoot })
 
 $scan.Add_Click({
   if ($list.Items.Count -lt 1) { [Windows.Forms.MessageBox]::Show('Сначала добавьте папку или ZIP.', 'Нет модов') | Out-Null; return }
