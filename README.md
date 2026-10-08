@@ -67,7 +67,7 @@ python runner/aggregate.py --modrelease modrelease.json --workbench workbench.js
 
 Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition** — отдельный Windows-пакет с графическим пакетным запуском нескольких папок/ZIP и HTML-сводкой. Он использует те же открытые сканеры; дополнительные game-specific правила не заявляются.
 
-Получить Pro: [Boosty — ссылка появится после публикации набора](https://boosty.to/azizazimov).
+Получить Pro: [Windows-набор на Boosty — 50 ₽](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). Подробнее о бесплатной версии и релизах: [открытый анонс](https://boosty.to/azizazimov/posts/b17a51a0-9dbf-4427-b810-700cfbfef3ab).
 
 ## Разработка
 
