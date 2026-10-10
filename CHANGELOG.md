@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.9 - 2026-10-11
+
+- Pin the ModRelease Studio Action install to v0.3.5.
+- Refresh the Quality Gate quick-start to v1.0.9.
+
 ## 1.0.8 - 2026-10-11
 
 - Centralize workspace path validation and cover parent traversal, outside symlinks, missing files, and directories with unit tests.
