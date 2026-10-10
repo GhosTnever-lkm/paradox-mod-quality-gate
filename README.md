@@ -2,6 +2,8 @@
 
 **Открытый preflight-набор для модов Paradox:** запускает ModRelease Studio и Paradox Mod Workbench в GitHub Actions, сводит результаты в один отчёт и показывает находки рядом с pull request.
 
+[![CI](https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/actions/workflows/ci.yml) · [![Version](https://img.shields.io/github/v/release/GhosTnever-lkm/paradox-mod-quality-gate?sort=semver)](https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/releases) · ![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+
 > Анализаторы проверяют структуру и известные правила. Чистый отчёт не гарантирует, что мод запускается в игре или полностью совместим.
 
 ## Возможности

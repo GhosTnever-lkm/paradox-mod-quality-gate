@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 — 2026-10-10
+
+- Add CI, version and license badges to the README.
+
 ## 1.0.1 — 2026-10-08
 
 - Added direct links to the published Boosty Pro package and public announcement.
