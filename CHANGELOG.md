@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.5 - 2026-10-11
+
+- Pin the scanner install examples to ModRelease Studio v0.3.2 so the combined gate can use required-path policies.
+- Refresh the quick-start to Paradox Mod Quality Gate v1.0.5.
+
 ## 1.0.4 — 2026-10-11
 
 - Add GitHub Funding metadata with verified Buy Me a Coffee and Gumroad links.
