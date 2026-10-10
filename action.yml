@@ -6,6 +6,10 @@ inputs:
     description: Mod folder or ZIP path relative to the workspace.
     required: false
     default: .
+  config-file:
+    description: Optional ModRelease Studio TOML configuration path, relative to the workspace.
+    required: false
+    default: ''
   workbench-paths:
     description: Optional newline-separated list of folders or ZIPs for pack comparison.
     required: false
@@ -60,6 +64,7 @@ runs:
       shell: bash
       env:
         MOD_PATH: ${{ inputs.mod-path }}
+        CONFIG_FILE: ${{ inputs.config-file }}
         WORKBENCH_PATHS: ${{ inputs.workbench-paths }}
         GATE: ${{ inputs.gate }}
         REPORT_DIR: ${{ runner.temp }}/pmqg-reports
@@ -77,6 +82,17 @@ runs:
             raise SystemExit("mod-path must stay inside GITHUB_WORKSPACE")
         if not mod_path.exists():
             raise SystemExit("mod-path does not exist")
+        config_text = os.environ.get("CONFIG_FILE", "").strip()
+        config_args = []
+        if config_text:
+            config_path = (root / config_text).resolve()
+            try:
+                config_path.relative_to(root)
+            except ValueError:
+                raise SystemExit("config-file must stay inside GITHUB_WORKSPACE")
+            if not config_path.is_file():
+                raise SystemExit("config-file does not exist")
+            config_args = ["--config", str(config_path)]
         paths_text = os.environ.get("WORKBENCH_PATHS", "").strip()
         sources = [root / p.strip() for p in paths_text.splitlines() if p.strip()] or [mod_path]
         resolved = []
@@ -91,7 +107,7 @@ runs:
             resolved.append(str(item))
         mod_json, mod_md, pmw_json = out / "modrelease.json", out / "modrelease.md", out / "workbench.json"
         runs = [
-            (["modrelease", "scan", str(mod_path), "--json-out", str(mod_json), "--md-out", str(mod_md)], {0, 1}, mod_json),
+            (["modrelease", "scan", str(mod_path), *config_args, "--json-out", str(mod_json), "--md-out", str(mod_md)], {0, 1}, mod_json),
             (["pmw", "scan", *resolved, "--format", "json", "--output", str(pmw_json), "--fail-on", "never"], {0}, pmw_json),
         ]
         for command, expected, report in runs:

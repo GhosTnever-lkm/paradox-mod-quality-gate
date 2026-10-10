@@ -1,0 +1,3 @@
+[scan]
+required_paths = ["required-file-that-is-absent.txt"]
+required_paths_severity = "ERROR"

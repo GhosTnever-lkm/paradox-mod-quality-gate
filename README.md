@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.6
+      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.7
         with:
           mod-path: .
           gate: error
@@ -44,10 +44,29 @@ jobs:
 | Input | По умолчанию | Описание |
 |---|---|---|
 | `mod-path` | `.` | Папка/ZIP для ModRelease Studio и путь Workbench, если список ниже пуст. |
+| `config-file` | пусто | Путь к TOML-политике ModRelease Studio внутри workspace. |
 | `workbench-paths` | пусто | Список папок/ZIP Workbench, каждый путь с новой строки. |
 | `gate` | `error` | `error`, `warning` или `never`. Ошибки сканера/входа всегда завершают action с ошибкой. |
 | `python-version` | `3.12` | Версия Python. |
 | `artifact-name` | `paradox-mod-quality-report` | Название отчётного artifact. |
+
+## Пользовательская политика релиза
+
+Передайте `config-file` с TOML-политикой ModRelease Studio, чтобы включить проверки обязательных путей. Путь должен быть внутри checkout. `ERROR`-находка попадёт в общий отчёт и заблокирует стандартный `gate: error`; прошедшая политика не блокирует запуск. CI проверяет это на фикстуре с намеренно отсутствующим файлом.
+
+```yaml
+- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.7
+  with:
+    mod-path: path/to/mod
+    config-file: path/to/mod/modrelease.toml
+    gate: error
+```
+
+```toml
+[scan]
+required_paths = ["descriptor.mod", "README.md"]
+required_paths_severity = "ERROR"
+```
 
 ## Артефакты и данные
 

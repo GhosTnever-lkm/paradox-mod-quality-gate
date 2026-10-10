@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.7 - 2026-10-11
+
+- Add a workspace-contained `config-file` input for ModRelease Studio policies.
+- Prove an ERROR-level required-path finding blocks the default gate in CI.
+- Document project-specific policy setup.
+
 ## 1.0.6 - 2026-10-11
 
 - Pin Action and Pro scanner installs to ModRelease Studio v0.3.4.
