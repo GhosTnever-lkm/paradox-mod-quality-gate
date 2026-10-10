@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.3
+      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.4
         with:
           mod-path: .
           gate: error
