@@ -75,35 +75,28 @@ runs:
         action = Path(sys.argv[1])
         root = Path(os.environ["GITHUB_WORKSPACE"]).resolve()
         out = Path(os.environ["REPORT_DIR"])
-        mod_path = (root / os.environ["MOD_PATH"]).resolve()
+        sys.path.insert(0, str(action / "runner"))
+        from workspace import resolve_workspace_path
         try:
-            mod_path.relative_to(root)
-        except ValueError:
-            raise SystemExit("mod-path must stay inside GITHUB_WORKSPACE")
-        if not mod_path.exists():
-            raise SystemExit("mod-path does not exist")
+            mod_path = resolve_workspace_path(root, os.environ["MOD_PATH"], label="mod-path")
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from None
         config_text = os.environ.get("CONFIG_FILE", "").strip()
         config_args = []
         if config_text:
-            config_path = (root / config_text).resolve()
             try:
-                config_path.relative_to(root)
-            except ValueError:
-                raise SystemExit("config-file must stay inside GITHUB_WORKSPACE")
-            if not config_path.is_file():
-                raise SystemExit("config-file does not exist")
+                config_path = resolve_workspace_path(root, config_text, label="config-file", require_file=True)
+            except ValueError as exc:
+                raise SystemExit(str(exc)) from None
             config_args = ["--config", str(config_path)]
         paths_text = os.environ.get("WORKBENCH_PATHS", "").strip()
         sources = [root / p.strip() for p in paths_text.splitlines() if p.strip()] or [mod_path]
         resolved = []
         for path in sources:
-            item = path.resolve()
             try:
-                item.relative_to(root)
-            except ValueError:
-                raise SystemExit("workbench path must stay inside GITHUB_WORKSPACE")
-            if not item.exists():
-                raise SystemExit("workbench path does not exist")
+                item = resolve_workspace_path(root, str(path), label="workbench path")
+            except ValueError as exc:
+                raise SystemExit(str(exc)) from None
             resolved.append(str(item))
         mod_json, mod_md, pmw_json = out / "modrelease.json", out / "modrelease.md", out / "workbench.json"
         runs = [

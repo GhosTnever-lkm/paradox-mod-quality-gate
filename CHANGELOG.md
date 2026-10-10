@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.8 - 2026-10-11
+
+- Centralize workspace path validation and cover parent traversal, outside symlinks, missing files, and directories with unit tests.
+- Keep the aggregate report version synchronized with the release.
+- Refresh the quick-start pin to v1.0.8.
+
 ## 1.0.7 - 2026-10-11
 
 - Add a workspace-contained `config-file` input for ModRelease Studio policies.

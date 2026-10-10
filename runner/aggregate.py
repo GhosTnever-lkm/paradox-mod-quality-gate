@@ -10,6 +10,8 @@ import sys
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+VERSION = (Path(__file__).resolve().parents[1] / "VERSION").read_text(encoding="utf-8").strip()
+
 
 def _text(item: dict[str, Any], key: str, default: str = "") -> str:
     value = item.get(key, default)
@@ -58,7 +60,7 @@ def normalize(modrelease: dict[str, Any], workbench: dict[str, Any]) -> dict[str
                          "line": line if isinstance(line, int) and line > 0 else None,
                          "message": _text(item, "message", "Finding without a message")[:1000]})
     counts = {key: sum(f["severity"] == key for f in findings) for key in ("error", "warning", "notice")}
-    return {"tool": "Paradox Mod Quality Gate", "version": "1.0.0", "scanners": {
+    return {"tool": "Paradox Mod Quality Gate", "version": VERSION, "scanners": {
         "modrelease": _text(modrelease, "version", "unknown"), "workbench": _text(workbench, "version", "unknown")},
         "counts": counts, "findings": findings}
 
