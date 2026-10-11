@@ -47,6 +47,39 @@ jobs:
           assert finding.severity == "WARNING" and "exceeded" in finding.message
           assert report.status == "REVIEW"
           PYCODE
+      - name: Verify scanner warning gate modes end-to-end
+        run: |
+          temp_dir="$RUNNER_TEMP/growth-gate"
+          mkdir -p "$temp_dir"
+          MODRELEASE_REPORT="$temp_dir/modrelease.json" python - <<'PYCODE'
+          import json, os
+          from pathlib import Path
+          from tempfile import TemporaryDirectory
+          from unittest.mock import patch
+          from modrelease_studio.models import FileRecord, Source
+          from modrelease_studio.reports import json_report
+          from modrelease_studio.scanner import scan_source
+          with TemporaryDirectory() as directory:
+              source = Source(Path(directory), [FileRecord("growing.txt", 1)], [], False)
+              with patch.object(Source, "read", return_value=b"x" * 11), patch.object(Source, "digest", return_value="0" * 64):
+                  report = scan_source(source, config={"max_file_bytes": 10, "required_files": []})
+          Path(os.environ["MODRELEASE_REPORT"]).write_text(json_report(report), encoding="utf-8")
+          Path(os.path.join(os.path.dirname(os.environ["MODRELEASE_REPORT"]), "workbench.json")).write_text(json.dumps({"findings": []}), encoding="utf-8")
+          PYCODE
+          workbench="$temp_dir/workbench.json"
+          python runner/aggregate.py --modrelease "$temp_dir/modrelease.json" --workbench "$workbench" --json-out "$temp_dir/error.json" --md-out "$temp_dir/error.md" --gate error
+          set +e
+          python runner/aggregate.py --modrelease "$temp_dir/modrelease.json" --workbench "$workbench" --json-out "$temp_dir/warning.json" --md-out "$temp_dir/warning.md" --gate warning
+          result=$?
+          set -e
+          test "$result" -eq 1
+          python - "$temp_dir/error.json" "$temp_dir/warning.json" <<'PYCODE'
+          import json,sys
+          for path in sys.argv[1:]:
+              report=json.load(open(path,encoding="utf-8"))
+              assert report["counts"]["warning"] == 1
+              assert any(item["code"] == "LARGE_TEXT_FILE" for item in report["findings"])
+          PYCODE
       - name: Create invisible-path report fixture
         run: |
           mkdir -p unicode-project

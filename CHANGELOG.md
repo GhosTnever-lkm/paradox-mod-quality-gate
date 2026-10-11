@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.29 - 2026-10-11
+
+- Verify `LARGE_TEXT_FILE` reaches the combined report; `gate: error` allows the warning and `gate: warning` blocks.
+
+
 ## 1.0.28 - 2026-10-11
 
 - Pin ModRelease Studio v0.3.46 and cover the new `LARGE_TEXT_FILE` growth warning in CI.
