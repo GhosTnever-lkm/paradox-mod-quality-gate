@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.26 - 2026-10-11
+
+- Advance the pinned ModRelease Studio scanner to v0.3.44 for safe Unicode report serialization.
+- Add an end-to-end Action fixture proving unified artifacts contain visible escapes for bidi and line separators.
+
 ## 1.0.25 - 2026-10-11
 
 - Make control, bidi, C1, and Unicode line/paragraph separators visible in JSON, Markdown, and GitHub annotations without changing parsed JSON values.
