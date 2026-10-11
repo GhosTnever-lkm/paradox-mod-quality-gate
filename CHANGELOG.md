@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.23 - 2026-10-11
+
+- Pin the composite Action, local install example, and Windows Pro launcher to ModRelease Studio v0.3.25, including the symlink-safe directory read fix.
+- Refresh the Quick Start Action tag to v1.0.23.
+
+
 ## 1.0.22 - 2026-10-11
 
 - Escape control characters, pipes, and backticks in untrusted finding paths so Markdown reports remain structurally safe.
