@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.12 - 2026-10-11
+
+- Pin scanner installs to ModRelease Studio v0.3.8 with cross-platform path collision checks.
+- Refresh the Quality Gate quick-start to v1.0.12.
+
 ## 1.0.11 - 2026-10-11
 
 - Pin scanner installs and examples to ModRelease Studio v0.3.7.
