@@ -60,7 +60,8 @@ jobs:
           for char in (chr(0x202E), chr(0x2028), chr(0x2029)):
               assert char not in json_text and char not in markdown
           report = json.loads(json_text)
-          path = report["findings"][0]["path"].lower()
+          finding = next(item for item in report["findings"] if item["code"] == "REQUIRED_PATH_MISSING")
+          path = finding["path"].lower()
           assert r"\u{202e}" in path and r"\u{2028}" in path and r"\u{2029}" in path
           assert "2028" in markdown.lower() and "2029" in markdown.lower()
           PY

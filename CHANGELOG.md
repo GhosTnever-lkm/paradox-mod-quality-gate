@@ -1,5 +1,12 @@
 # Changelog
 
+# Changelog
+
+## 1.0.27 - 2026-10-11
+
+- Select the intended synthetic finding by rule code in CI, avoiding an order-dependent assertion.
+- Keep the scanner pinned to ModRelease Studio v0.3.44.
+
 ## 1.0.26 - 2026-10-11
 
 - Advance the pinned ModRelease Studio scanner to v0.3.44 for safe Unicode report serialization.
