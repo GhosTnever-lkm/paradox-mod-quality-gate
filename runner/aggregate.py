@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
 import sys
+import unicodedata
 from pathlib import Path, PurePosixPath
 from typing import Any
 
@@ -18,6 +20,24 @@ def _text(item: dict[str, Any], key: str, default: str = "") -> str:
     return value if isinstance(value, str) else default
 
 
+def _visible_text(raw: str, *, preserve_line_breaks: bool = False) -> str:
+    """Escape invisible Unicode code points before showing untrusted text."""
+    safe = []
+    for char in raw:
+        category = unicodedata.category(char)
+        if preserve_line_breaks and char in "\r\n":
+            safe.append(char)
+        elif category.startswith("C") or category in {"Zl", "Zp"}:
+            codepoint = ord(char)
+            if codepoint < 0x20 or codepoint == 0x7F:
+                safe.append(f"\\x{codepoint:02x}")
+            else:
+                safe.append(f"\\u{{{codepoint:04x}}}")
+        else:
+            safe.append(char)
+    return "".join(safe)
+
+
 def _display_path(raw: str) -> str:
     # Paths originate in user-controlled mod archives. Keep report tables single-line
     # and prevent pipes/backticks from changing Markdown table/code-span structure.
@@ -27,8 +47,19 @@ def _display_path(raw: str) -> str:
         if char in {"|", "`"} or codepoint < 0x20 or codepoint == 0x7F:
             safe.append(f"\\x{codepoint:02x}")
         else:
-            safe.append(char)
+            safe.append(_visible_text(char))
     return "".join(safe)
+
+
+def _markdown_text(raw: str) -> str:
+    text = _visible_text(raw)
+    text = html.escape(text, quote=False)
+    return re.sub(r"([\\`*_{}\[\]()#+.!|><:~-])", r"\\\1", text)
+
+
+def json_report(report: dict[str, Any]) -> str:
+    """Use JSON escapes for non-ASCII text while retaining parsed data exactly."""
+    return json.dumps(report, ensure_ascii=True, indent=2)
 
 
 def _safe_path(raw: str) -> str:
@@ -79,6 +110,7 @@ def normalize(modrelease: dict[str, Any], workbench: dict[str, Any]) -> dict[str
 
 
 def _escape_command(value: str) -> str:
+    value = _visible_text(value, preserve_line_breaks=True)
     return value.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A").replace(":", "%3A").replace(",", "%2C")
 
 
@@ -99,11 +131,12 @@ def markdown(report: dict[str, Any]) -> str:
     lines = ["# Paradox Mod Quality Gate", "", f"**{c['error']} errors · {c['warning']} warnings · {c['notice']} notices**", "",
              "| Level | Tool / check | File | Finding |", "|---|---|---|---|"]
     for finding in report["findings"][:100]:
-        msg = finding["message"].replace("|", "\\|").replace("\n", " ")
+        msg = _markdown_text(finding["message"])
         if finding.get("mod"):
-            msg = f"**{finding['mod']}** — {msg}"
+            msg = f"**{_markdown_text(finding['mod'])}** — {msg}"
         path = finding["path"] + (f":{finding['line']}" if finding["line"] else "")
-        lines.append(f"| {finding['severity']} | {finding['source']} / `{finding['code']}` | `{path or '—'}` | {msg} |")
+        code = _display_path(finding["code"])
+        lines.append(f"| {finding['severity']} | {finding['source']} / `{code}` | `{path or '—'}` | {msg} |")
     if len(report["findings"]) > 100:
         lines.append(f"| — | — | — | Showing 100 of {len(report['findings'])} findings; see the JSON artifact. |")
     if not report["findings"]:
@@ -126,7 +159,7 @@ def main(argv: list[str] | None = None) -> int:
     except ValueError as exc:
         print(f"Paradox Mod Quality Gate: {exc}", file=sys.stderr)
         return 2
-    Path(args.json_out).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    Path(args.json_out).write_text(json_report(report) + "\n", encoding="utf-8")
     rendered = markdown(report)
     Path(args.md_out).write_text(rendered + "\n", encoding="utf-8")
     if args.github:

@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "runner"))
-from aggregate import normalize  # noqa: E402
+from aggregate import _annotation, json_report, markdown, normalize  # noqa: E402
 from workspace import resolve_workspace_path  # noqa: E402
 
 
@@ -85,6 +85,31 @@ class AggregateTests(unittest.TestCase):
         rendered = __import__("aggregate").markdown(report)
         self.assertEqual(rendered.count("| error |"), 1)
         self.assertNotIn("evil|`row\n", rendered)
+
+    def test_invisible_unicode_is_visible_in_json_markdown_and_annotations(self):
+        raw = {
+            "findings": [{
+                "code": "RULE\u202eTXT", "severity": "ERROR",
+                "path": "events/evil\u202eexe.txt\u2028line\u2029end\u0085file",
+                "message": "bad\u202evalue <img src=x>| [click](javascript:alert(1))",
+                "mod": "Mod\u202e**spoof**",
+            }]
+        }
+        report = normalize(raw, {"findings": []})
+        json_text = json_report(report)
+        markdown_text = markdown(report)
+        annotation = _annotation(report["findings"][0])
+        for output in (json_text, markdown_text, annotation):
+            for invisible in ("\u202e", "\u2028", "\u2029", "\u0085"):
+                self.assertNotIn(invisible, output.casefold())
+        self.assertIn(r"\u202e", json_text.casefold())
+        self.assertIn("202e", markdown_text.casefold())
+        self.assertIn("2028", markdown_text.casefold())
+        self.assertIn("2029", annotation.casefold())
+        self.assertIn("&lt;img", markdown_text)
+        self.assertNotIn("<img", markdown_text)
+        self.assertEqual(json.loads(json_text), report)
+        self.assertEqual(len(annotation.splitlines()), 1)
 
     def test_invalid_report_is_actionable_and_exit_2(self):
         with tempfile.TemporaryDirectory() as temp:

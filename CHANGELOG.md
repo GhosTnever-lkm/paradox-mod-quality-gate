@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.25 - 2026-10-11
+
+- Make control, bidi, C1, and Unicode line/paragraph separators visible in JSON, Markdown, and GitHub annotations without changing parsed JSON values.
+- Escape untrusted Markdown text/HTML in findings and repair the lagging report VERSION metadata.
+- Add hostile Unicode regression coverage across all three output formats; keep scanner pins at v0.3.25.
+
 ## 1.0.24 - 2026-10-11
 
 - Assert in CI that the composite Action installs the exact pinned ModRelease Studio v0.3.25.
