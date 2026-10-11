@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.33 - 2026-10-11
+
+- Pin ModRelease Studio v0.3.53 so ZIP release scans still inspect `.git` and other normally ignored directory names for secrets.
+- Verify a synthetic archived `.git` secret is reported in CI.
+
+
 ## 1.0.32 - 2026-10-11
 
 - Correct the traversal integration fixture boundary: account for the OS-junk file in the indexed-entry limit.
