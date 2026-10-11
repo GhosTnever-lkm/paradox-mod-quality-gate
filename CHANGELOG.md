@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.20 - 2026-10-11
+
+- Pin ModRelease Studio v0.3.16, which omits local parent paths from shareable reports.
+- Refresh the Quick Start Action tag.
+
 ## 1.0.19 - 2026-10-11
 
 - Pin the Action and local scanner installs to ModRelease Studio v0.3.15.
