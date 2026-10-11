@@ -1,6 +1,8 @@
 # Changelog
 
-# Changelog
+## 1.0.28 - 2026-10-11
+
+- Pin ModRelease Studio v0.3.46 and cover the new `LARGE_TEXT_FILE` growth warning in CI.
 
 ## 1.0.27 - 2026-10-11
 
