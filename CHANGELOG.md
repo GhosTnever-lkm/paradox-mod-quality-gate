@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.11 - 2026-10-11
+
+- Pin scanner installs and examples to ModRelease Studio v0.3.7.
+- Refresh the Quality Gate quick-start to v1.0.11.
+
 ## 1.0.10 - 2026-10-11
 
 - Pin scanner installs and policy examples to ModRelease Studio v0.3.6.
