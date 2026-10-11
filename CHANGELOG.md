@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.31 - 2026-10-11
+
+- Pin ModRelease Studio v0.3.52 to avoid generated-directory files consuming the entry limit.
+- Verify pre-index pruning in CI.
+
+
 ## 1.0.30 - 2026-10-11
 
 - Pin ModRelease Studio v0.3.50, including generated-folder exclusions and OS-junk warnings.
