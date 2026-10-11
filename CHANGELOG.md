@@ -1,3 +1,8 @@
+## 1.0.36 - 2026-10-11
+
+- Pin ModRelease Studio v0.3.57 in the GitHub Action, manual install guide, and Pro launcher.
+- The scanner now prunes paths and reports `READ_METADATA` if directory junction metadata cannot be checked; CI verifies the combined gate thresholds end to end.
+
 ## 1.0.35 - 2026-10-11
 
 - Verify that an emitted `JUNCTION` warning passes `gate: error` but blocks `gate: warning`.

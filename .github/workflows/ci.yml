@@ -30,7 +30,7 @@ jobs:
           ACTION_OUTCOME: ${{ steps.expected-policy-failure.outcome }}
         run: test "$ACTION_OUTCOME" = "failure"
       - name: Assert exact installed ModRelease Studio version
-        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.56", actual'
+        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.57", actual'
       - name: Verify installed scanner traversal policy
         run: |
           python - <<'PYCODE'
@@ -154,6 +154,50 @@ jobs:
               report=json.load(open(path,encoding="utf-8"))
               assert report["counts"]["warning"] == 1
               assert any(item["code"] == "JUNCTION" for item in report["findings"])
+          PYCODE
+      - name: Verify unreadable junction metadata is pruned and gated
+        run: |
+          temp_dir="$RUNNER_TEMP/metadata-gate"
+          mkdir -p "$temp_dir"
+          MODRELEASE_REPORT="$temp_dir/modrelease.json" python - <<'PYCODE'
+          import json, os
+          from pathlib import Path
+          from tempfile import TemporaryDirectory
+          from unittest.mock import patch
+          from modrelease_studio.reports import json_report
+          from modrelease_studio.scanner import scan_path
+          with TemporaryDirectory() as directory:
+              root = Path(directory) / "mod"
+              restricted = root / "restricted"
+              restricted.mkdir(parents=True)
+              (root / "inside.txt").write_text("inside fixture", encoding="utf-8")
+              (restricted / "private-fixture.txt").write_text("do not index", encoding="utf-8")
+              def junction_status(path):
+                  if path.name == "restricted":
+                      raise PermissionError(13, "Permission denied", str(path))
+                  return False
+              with patch.object(Path, "is_junction", junction_status, create=True):
+                  report = scan_path(root, config={"required_files": []})
+          finding = next(item for item in report.findings if item.code == "READ_METADATA")
+          assert finding.path == "restricted" and finding.severity == "WARNING"
+          assert report.file_count == 1 and report.errors == 0
+          Path(os.environ["MODRELEASE_REPORT"]).write_text(json_report(report), encoding="utf-8")
+          Path(os.path.join(os.path.dirname(os.environ["MODRELEASE_REPORT"]), "workbench.json")).write_text(
+              json.dumps({"findings": []}), encoding="utf-8")
+          PYCODE
+          workbench="$temp_dir/workbench.json"
+          python runner/aggregate.py --modrelease "$temp_dir/modrelease.json" --workbench "$workbench" --json-out "$temp_dir/error.json" --md-out "$temp_dir/error.md" --gate error
+          set +e
+          python runner/aggregate.py --modrelease "$temp_dir/modrelease.json" --workbench "$workbench" --json-out "$temp_dir/warning.json" --md-out "$temp_dir/warning.md" --gate warning
+          warning_status=$?
+          set -e
+          test "$warning_status" -eq 1
+          python - "$temp_dir/error.json" "$temp_dir/warning.json" <<'PYCODE'
+          import json,sys
+          for path in sys.argv[1:]:
+              report=json.load(open(path,encoding="utf-8"))
+              assert report["counts"]["warning"] == 1
+              assert any(item["code"] == "READ_METADATA" and item["path"] == "restricted" for item in report["findings"])
           PYCODE
       - name: Create invisible-path report fixture
         run: |
