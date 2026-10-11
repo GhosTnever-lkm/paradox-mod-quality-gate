@@ -1,6 +1,6 @@
-## 1.0.39 - 2026-10-12
+## 1.0.40 - 2026-10-12
 
-- Pin ModRelease Studio v0.3.59 in the Action, Windows Pro launcher, and install guide; verify the exact scanner version in CI.
+- Pin ModRelease Studio v0.3.59 and Paradox Mod Workbench v0.2.3 in the Action, Windows Pro launcher, and install guide; verify exact scanner versions in CI.
 
 ## 1.0.38 - 2026-10-12
 

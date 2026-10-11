@@ -89,7 +89,7 @@ jobs:
       - uses: actions/checkout@v6
       - name: Check mod release
         id: quality
-        uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.39
+        uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.40
         with:
           mod-path: .
           gate: error
@@ -107,7 +107,7 @@ jobs:
 
 ```powershell
 python -m pip install "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.59"
-python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.2"
+python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.3"
 modrelease scan . --json-out modrelease.json --md-out modrelease.md
 pmw scan . --format json --output workbench.json
 python runner/aggregate.py --modrelease modrelease.json --workbench workbench.json --json-out report.json --md-out report.md --sarif-out report.sarif --gate error
