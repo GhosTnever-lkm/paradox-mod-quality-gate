@@ -1,9 +1,10 @@
 # Changelog
 
-## 1.0.31 - 2026-10-11
+## 1.0.32 - 2026-10-11
 
-- Pin ModRelease Studio v0.3.52 to avoid generated-directory files consuming the entry limit.
-- Verify pre-index pruning in CI.
+- Correct the traversal integration fixture boundary: account for the OS-junk file in the indexed-entry limit.
+- Retain the pre-index pruning regression for ignored folders.
+
 
 
 ## 1.0.30 - 2026-10-11

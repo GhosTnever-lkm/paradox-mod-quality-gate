@@ -45,13 +45,13 @@ jobs:
               generated.write_text("api_key=FAKE_api_key_value_123456789", encoding="utf-8")
               (root / ".DS_Store").write_bytes(b"")
               (root / "mod.cfg").write_text("name=sample", encoding="utf-8")
-              with patch("modrelease_studio.sources.MAX_ENTRIES", 1):
+              with patch("modrelease_studio.sources.MAX_ENTRIES", 2):
                   report = scan_path(root, config={"required_files": []})
           codes = {item.code for item in report.findings}
           assert "GENERIC_API_KEY" not in codes
           assert "OS_JUNK" in codes
           assert "ENTRY_LIMIT" not in codes
-          assert report.file_count == 1 and report.errors == 0
+          assert report.file_count == 2 and report.errors == 0
           PYCODE
       - name: Verify installed scanner reports file-size growth
         run: |
