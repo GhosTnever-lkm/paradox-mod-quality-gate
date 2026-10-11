@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.19 - 2026-10-11
+
+- Pin the Action and local scanner installs to ModRelease Studio v0.3.15.
+- Refresh the Quality Gate quick-start to v1.0.19.
+
 ## 1.0.18 - 2026-10-11
 
 - Pin the Action and local scanner installs to ModRelease Studio v0.3.14.
