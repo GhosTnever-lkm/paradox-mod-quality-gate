@@ -17,7 +17,10 @@ class WorkspacePathTests(unittest.TestCase):
             root = Path(temp)
             config = root / "modrelease.toml"
             config.write_text("[scan]\n", encoding="utf-8")
-            self.assertEqual(resolve_workspace_path(root, "modrelease.toml", label="config-file", require_file=True), config)
+            self.assertEqual(
+                resolve_workspace_path(root, "modrelease.toml", label="config-file", require_file=True),
+                config.resolve(),
+            )
 
     def test_rejects_parent_traversal_and_absolute_outside_path(self):
         with tempfile.TemporaryDirectory() as temp, tempfile.TemporaryDirectory() as outside:
@@ -43,7 +46,12 @@ class WorkspacePathTests(unittest.TestCase):
             target = Path(outside) / "real.toml"
             target.write_text("[scan]\n", encoding="utf-8")
             link = root / "escape.toml"
-            link.symlink_to(target)
+            try:
+                link.symlink_to(target)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    self.skipTest("symbolic-link creation is not permitted for this Windows account")
+                raise
             with self.assertRaisesRegex(ValueError, "must stay inside"):
                 resolve_workspace_path(root, "escape.toml", label="config-file", require_file=True)
 
