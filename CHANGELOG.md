@@ -1,3 +1,7 @@
+## 1.0.37 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.58 and Paradox Mod Workbench v0.2.2 in the GitHub Action, Pro launcher, and install guide; align the CI version assertion.
+
 ## 1.0.36 - 2026-10-11
 
 - Pin ModRelease Studio v0.3.57 in the GitHub Action, manual install guide, and Pro launcher.

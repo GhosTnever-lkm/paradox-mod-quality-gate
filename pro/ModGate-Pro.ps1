@@ -94,7 +94,9 @@ $scan.Add_Click({
     if ($proc.ExitCode -ne 0 -or -not (Test-Path $pmwJson)) { throw "Paradox Mod Workbench failed (exit $($proc.ExitCode))." }
 
     # Merge per-mod release findings with the pack Workbench report without adding machine-specific source paths.
-    $mr = [ordered]@{ version='0.2.1'; findings=@() }
+    $scannerVersion = 'unknown'
+    if ($releaseReports.Count -gt 0 -and $releaseReports[0].version) { $scannerVersion = [string]$releaseReports[0].version }
+    $mr = [ordered]@{ version=$scannerVersion; findings=@() }
     foreach ($item in $releaseReports) { $mr.findings += @($item.findings) }
     $mrPath = Join-Path $target 'combined-modrelease.json'
     $mr | ConvertTo-Json -Depth 30 | Set-Content -Encoding UTF8 $mrPath

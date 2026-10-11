@@ -50,8 +50,8 @@ runs:
       shell: bash
       run: |
         python -m pip install --disable-pip-version-check \
-          "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.57" \
-          "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.1"
+          "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.58" \
+          "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.2"
     - name: Prepare reports
       id: report
       shell: bash
