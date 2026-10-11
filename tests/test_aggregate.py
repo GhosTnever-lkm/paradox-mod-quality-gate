@@ -75,6 +75,17 @@ class AggregateTests(unittest.TestCase):
         for private_segment in ("/home/alice", "C:\\Users", "Documents", "private"):
             self.assertNotIn(private_segment, rendered)
 
+    def test_untrusted_path_markup_cannot_break_markdown_table(self):
+        report = normalize(
+            {"findings": [{"code": "PATH", "severity": "ERROR", "path": "events/evil|`row\nnext.txt"}]},
+            {"findings": []},
+        )
+        path = report["findings"][0]["path"]
+        self.assertEqual(path, r"events/evil\x7c\x60row\x0anext.txt")
+        rendered = __import__("aggregate").markdown(report)
+        self.assertEqual(rendered.count("| error |"), 1)
+        self.assertNotIn("evil|`row\n", rendered)
+
     def test_invalid_report_is_actionable_and_exit_2(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

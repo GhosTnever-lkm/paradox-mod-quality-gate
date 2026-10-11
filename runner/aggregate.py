@@ -18,12 +18,25 @@ def _text(item: dict[str, Any], key: str, default: str = "") -> str:
     return value if isinstance(value, str) else default
 
 
+def _display_path(raw: str) -> str:
+    # Paths originate in user-controlled mod archives. Keep report tables single-line
+    # and prevent pipes/backticks from changing Markdown table/code-span structure.
+    safe = []
+    for char in raw:
+        codepoint = ord(char)
+        if char in {"|", "`"} or codepoint < 0x20 or codepoint == 0x7F:
+            safe.append(f"\\x{codepoint:02x}")
+        else:
+            safe.append(char)
+    return "".join(safe)
+
+
 def _safe_path(raw: str) -> str:
     raw = raw.replace("\\", "/")
     if raw.startswith("/") or re.match(r"^[A-Za-z]:/", raw):
-        return PurePosixPath(raw).name[:200]
+        return _display_path(PurePosixPath(raw).name[:200])
     parts = [p for p in PurePosixPath(raw).parts if p not in ("/", "", ".", "..")]
-    return "/".join(parts)[:300]
+    return _display_path("/".join(parts)[:300])
 
 
 def _load(path: str, label: str) -> dict[str, Any]:

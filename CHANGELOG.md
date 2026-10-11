@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.22 - 2026-10-11
+
+- Escape control characters, pipes, and backticks in untrusted finding paths so Markdown reports remain structurally safe.
+
+
 ## 1.0.21 - 2026-10-11
 
 - Add regression coverage proving absolute POSIX and Windows finding paths are reduced to basenames in shared reports.
