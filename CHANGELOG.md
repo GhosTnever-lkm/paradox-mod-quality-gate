@@ -1,3 +1,7 @@
+## 1.0.39 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.59 in the Action, Windows Pro launcher, and install guide; verify the exact scanner version in CI.
+
 ## 1.0.38 - 2026-10-12
 
 - Export the unified findings as relative-path SARIF 2.1.0, expose the file from the Action, and include it in GitHub artifacts and Pro reports.
