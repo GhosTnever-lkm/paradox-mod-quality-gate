@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.21 - 2026-10-11
+
+- Add regression coverage proving absolute POSIX and Windows finding paths are reduced to basenames in shared reports.
+
+
 ## 1.0.20 - 2026-10-11
 
 - Pin ModRelease Studio v0.3.16, which omits local parent paths from shareable reports.

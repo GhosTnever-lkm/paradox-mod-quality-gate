@@ -62,6 +62,19 @@ class AggregateTests(unittest.TestCase):
         self.assertEqual(report["findings"][1]["mod"], "A")
         self.assertNotIn("alice", json.dumps(report))
 
+    def test_absolute_finding_paths_are_reduced_to_basename(self):
+        report = normalize(
+            {"findings": [
+                {"code": "POSIX", "severity": "ERROR", "path": "/home/alice/private/mod/events/suspect.txt"},
+                {"code": "WINDOWS", "severity": "WARNING", "path": r"C:\Users\Alice\Documents\mod\secret.cfg"},
+            ]},
+            {"findings": []},
+        )
+        rendered = json.dumps(report)
+        self.assertEqual([item["path"] for item in report["findings"]], ["suspect.txt", "secret.cfg"])
+        for private_segment in ("/home/alice", "C:\\Users", "Documents", "private"):
+            self.assertNotIn(private_segment, rendered)
+
     def test_invalid_report_is_actionable_and_exit_2(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
