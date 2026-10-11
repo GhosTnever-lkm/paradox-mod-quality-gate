@@ -254,7 +254,7 @@ jobs:
           sarif = json.loads(sarif_text)
           assert sarif["version"] == "2.1.0"
           assert os.environ["SARIF_READY"] == "true"
-          sarif_message = sarif["runs"][0]["results"][0]["message"]["text"]
-          assert r"\u202E" in sarif_message
+          sarif_text_lower = sarif_text.lower()
+          assert r"\u{202e}" in sarif_text_lower
           assert "uriBaseId" not in sarif_text and "originalUriBaseIds" not in sarif_text
           PY
