@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.12
+      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.13
         with:
           mod-path: .
           gate: error
@@ -55,7 +55,7 @@ jobs:
 Передайте `config-file` с TOML-политикой ModRelease Studio, чтобы включить проверки обязательных путей. Путь должен быть внутри checkout. `ERROR`-находка попадёт в общий отчёт и заблокирует стандартный `gate: error`; прошедшая политика не блокирует запуск. CI проверяет это на фикстуре с намеренно отсутствующим файлом.
 
 ```yaml
-- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.12
+- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.13
   with:
     mod-path: path/to/mod
     config-file: path/to/mod/modrelease.toml
@@ -77,7 +77,7 @@ required_paths_severity = "ERROR"
 ## Локальное использование
 
 ```powershell
-python -m pip install "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.8"
+python -m pip install "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.9"
 python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.1"
 modrelease scan . --json-out modrelease.json --md-out modrelease.md
 pmw scan . --format json --output workbench.json
