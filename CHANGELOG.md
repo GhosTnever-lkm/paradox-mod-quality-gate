@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.24 - 2026-10-11
+
+- Assert in CI that the composite Action installs the exact pinned ModRelease Studio v0.3.25.
+- Scanner pins and runtime behavior are unchanged; this release strengthens integration verification only.
+
 ## 1.0.23 - 2026-10-11
 
 - Pin the composite Action, local install example, and Windows Pro launcher to ModRelease Studio v0.3.25, including the symlink-safe directory read fix.
