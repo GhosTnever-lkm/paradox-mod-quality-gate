@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.30 - 2026-10-11
+
+- Pin ModRelease Studio v0.3.50, including generated-folder exclusions and OS-junk warnings.
+- Verify scanner traversal policy in CI.
+
+
 ## 1.0.29 - 2026-10-11
 
 - Verify `LARGE_TEXT_FILE` reaches the combined report; `gate: error` allows the warning and `gate: warning` blocks.
