@@ -1,3 +1,9 @@
+## 1.0.34 - 2026-10-11
+
+- Pin ModRelease Studio v0.3.56 so folder scans do not traverse Windows directory junctions.
+- Keep the combined gate and Pro launcher aligned with the released scanner.
+- Assert the exact scanner version in CI.
+
 # Changelog
 
 ## 1.0.33 - 2026-10-11
