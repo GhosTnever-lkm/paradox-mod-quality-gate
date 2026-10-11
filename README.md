@@ -12,6 +12,7 @@
 - сравнение файлов модпака, зависимостей и Clausewitz-скриптов через [Paradox Mod Workbench](https://github.com/GhosTnever-lkm/paradox-mod-workbench);
 - GitHub error/warning annotations, сводка job и JSON/Markdown отчёты;
 - режимы блокировки: `error`, `warning` или `never`;
+- folder scan в ModRelease Studio не следует symlink и Windows junction; пропущенный junction виден как warning и учитывается выбранным gate-порогом;
 - сканеры работают только для чтения; artifact содержит только отчёты, не ZIP и не исходники мода.
 
 ## Быстрый старт
@@ -31,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.33
+      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.35
         with:
           mod-path: .
           gate: error
@@ -55,7 +56,7 @@ jobs:
 Передайте `config-file` с TOML-политикой ModRelease Studio, чтобы включить проверки обязательных путей. Путь должен быть внутри checkout. `ERROR`-находка попадёт в общий отчёт и заблокирует стандартный `gate: error`; прошедшая политика не блокирует запуск. CI проверяет это на фикстуре с намеренно отсутствующим файлом.
 
 ```yaml
-- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.33
+- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.35
   with:
     mod-path: path/to/mod
     config-file: path/to/mod/modrelease.toml

@@ -1,3 +1,8 @@
+## 1.0.35 - 2026-10-11
+
+- Verify that an emitted `JUNCTION` warning passes `gate: error` but blocks `gate: warning`.
+- Keep the scanner pinned to ModRelease Studio v0.3.56.
+
 ## 1.0.34 - 2026-10-11
 
 - Pin ModRelease Studio v0.3.56 so folder scans do not traverse Windows directory junctions.
