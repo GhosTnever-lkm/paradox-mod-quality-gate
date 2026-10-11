@@ -33,6 +33,12 @@ outputs:
   markdown-report:
     description: Unified Markdown report path.
     value: ${{ steps.report.outputs.markdown }}
+  sarif-report:
+    description: Unified SARIF 2.1.0 report path.
+    value: ${{ steps.report.outputs.sarif }}
+  sarif-ready:
+    description: True when a complete SARIF report was generated.
+    value: ${{ steps.scan.outputs.sarif-ready }}
 runs:
   using: composite
   steps:
@@ -59,6 +65,7 @@ runs:
         mkdir -p "$RUNNER_TEMP/pmqg-reports"
         echo "json=$RUNNER_TEMP/pmqg-reports/report.json" >> "$GITHUB_OUTPUT"
         echo "markdown=$RUNNER_TEMP/pmqg-reports/report.md" >> "$GITHUB_OUTPUT"
+        echo "sarif=$RUNNER_TEMP/pmqg-reports/report.sarif" >> "$GITHUB_OUTPUT"
     - name: Run scanners and aggregate findings
       id: scan
       shell: bash
@@ -112,7 +119,11 @@ runs:
         from aggregate import main
         status = main(["--modrelease", str(mod_json), "--workbench", str(pmw_json),
                        "--json-out", str(out / "report.json"), "--md-out", str(out / "report.md"),
+                       "--sarif-out", str(out / "report.sarif"),
                        "--gate", os.environ["GATE"], "--github"])
+        if (out / "report.sarif").is_file():
+            with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as handle:
+                handle.write("sarif-ready=true\n")
         raise SystemExit(status)
         PY
     - name: Upload unified reports

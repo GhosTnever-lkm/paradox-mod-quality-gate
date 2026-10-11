@@ -29,6 +29,20 @@ jobs:
         env:
           ACTION_OUTCOME: ${{ steps.expected-policy-failure.outcome }}
         run: test "$ACTION_OUTCOME" = "failure"
+      - name: Assert SARIF survives a blocking finding
+        if: always()
+        env:
+          SARIF_READY: ${{ steps.expected-policy-failure.outputs['sarif-ready'] }}
+          SARIF_REPORT: ${{ steps.expected-policy-failure.outputs['sarif-report'] }}
+        run: |
+          test "$SARIF_READY" = "true"
+          test -f "$SARIF_REPORT"
+          python - "$SARIF_REPORT" <<'PY'
+          import json, sys
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          assert report["version"] == "2.1.0"
+          assert any(item["level"] == "error" for item in report["runs"][0]["results"])
+          PY
       - name: Assert exact installed ModRelease Studio version
         run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.58", actual'
       - name: Assert exact installed Paradox Mod Workbench version
@@ -221,12 +235,15 @@ jobs:
         env:
           JSON_REPORT: ${{ steps.unicode-report.outputs['json-report'] }}
           MARKDOWN_REPORT: ${{ steps.unicode-report.outputs['markdown-report'] }}
+          SARIF_REPORT: ${{ steps.unicode-report.outputs['sarif-report'] }}
+          SARIF_READY: ${{ steps.unicode-report.outputs['sarif-ready'] }}
         run: |
           python - <<'PY'
           import json, os
           from pathlib import Path
           json_text = Path(os.environ["JSON_REPORT"]).read_text(encoding="utf-8")
           markdown = Path(os.environ["MARKDOWN_REPORT"]).read_text(encoding="utf-8")
+          sarif_text = Path(os.environ["SARIF_REPORT"]).read_text(encoding="utf-8")
           for char in (chr(0x202E), chr(0x2028), chr(0x2029)):
               assert char not in json_text and char not in markdown
           report = json.loads(json_text)
@@ -234,4 +251,10 @@ jobs:
           path = finding["path"].lower()
           assert r"\u{202e}" in path and r"\u{2028}" in path and r"\u{2029}" in path
           assert "2028" in markdown.lower() and "2029" in markdown.lower()
+          sarif = json.loads(sarif_text)
+          assert sarif["version"] == "2.1.0"
+          assert os.environ["SARIF_READY"] == "true"
+          sarif_message = sarif["runs"][0]["results"][0]["message"]["text"]
+          assert r"\u202E" in sarif_message
+          assert "uriBaseId" not in sarif_text and "originalUriBaseIds" not in sarif_text
           PY

@@ -10,7 +10,7 @@
 
 - проверки метаданных, локализации, упаковки и секретов через [ModRelease Studio](https://github.com/GhosTnever-lkm/modrelease-studio);
 - сравнение файлов модпака, зависимостей и Clausewitz-скриптов через [Paradox Mod Workbench](https://github.com/GhosTnever-lkm/paradox-mod-workbench);
-- GitHub error/warning annotations, сводка job и JSON/Markdown отчёты;
+- GitHub error/warning annotations, сводка job и единые JSON/Markdown/SARIF 2.1.0 отчёты;
 - режимы блокировки: `error`, `warning` или `never`;
 - folder scan в ModRelease Studio не следует symlink и Windows junction; пропущенный junction виден как warning и учитывается выбранным gate-порогом;
 - сканеры работают только для чтения; artifact содержит только отчёты, не ZIP и не исходники мода.
@@ -71,7 +71,35 @@ required_paths_severity = "ERROR"
 
 ## Артефакты и данные
 
-В job summary показываются counts и до 50 findings. JSON/Markdown сохраняются в каталоге отчётов и загружаются даже при блокирующих находках. Отчёты содержат относительные пути, коды и диагностические сообщения. Исходные файлы, архивы, полный manifest и абсолютные локальные пути в artifact не попадают. GitHub сохраняет artifacts согласно настройкам репозитория и сроку хранения Actions.
+В job summary показываются counts и до 50 findings. JSON/Markdown/SARIF сохраняются в каталоге отчётов и загружаются даже при блокирующих находках. SARIF использует версию 2.1.0 и относительные URI; абсолютные пути компьютера в него не записываются. Исходные файлы, архивы и полный manifest в artifact не попадают. GitHub сохраняет artifacts согласно настройкам репозитория и сроку хранения Actions.
+
+### GitHub Code Scanning (необязательно)
+
+SARIF можно загрузить в Code Scanning отдельным шагом. Это требует явного разрешения `security-events: write` в репозитории-потребителе; сам composite Action такого разрешения не запрашивает. `sarif-ready` позволяет пропустить загрузку, если сканер завершился до создания полного отчёта. Для репозиториев, где Code Scanning недоступен, используйте JSON/Markdown/SARIF artifact.
+
+```yaml
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  mod-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check mod release
+        id: quality
+        uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.38
+        with:
+          mod-path: .
+          gate: error
+      - name: Upload findings to Code Scanning
+        if: always() && steps.quality.outputs.sarif-ready == 'true'
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ steps.quality.outputs.sarif-report }}
+          category: paradox-mod-quality-gate
+```
 
 Не запускайте это действие в `pull_request_target` для непроверенного кода: используйте обычный `pull_request` на GitHub-hosted runner. В action нет токена записи, PR-комментариев или модификации checkout.
 
@@ -82,7 +110,7 @@ python -m pip install "modrelease-studio @ git+https://github.com/GhosTnever-lkm
 python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.2"
 modrelease scan . --json-out modrelease.json --md-out modrelease.md
 pmw scan . --format json --output workbench.json
-python runner/aggregate.py --modrelease modrelease.json --workbench workbench.json --json-out report.json --md-out report.md --gate error
+python runner/aggregate.py --modrelease modrelease.json --workbench workbench.json --json-out report.json --md-out report.md --sarif-out report.sarif --gate error
 ```
 
 ## Платный Pro-набор

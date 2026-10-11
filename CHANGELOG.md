@@ -1,3 +1,8 @@
+## 1.0.38 - 2026-10-12
+
+- Export the unified findings as relative-path SARIF 2.1.0, expose the file from the Action, and include it in GitHub artifacts and Pro reports.
+- Add an opt-in Code Scanning upload example; the Action itself does not request extra token permissions.
+
 ## 1.0.37 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.58 and Paradox Mod Workbench v0.2.2 in the GitHub Action, Pro launcher, and install guide; align the CI version assertion.

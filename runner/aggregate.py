@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 import os
@@ -11,6 +12,7 @@ import sys
 import unicodedata
 from pathlib import Path, PurePosixPath
 from typing import Any
+from urllib.parse import quote
 
 VERSION = (Path(__file__).resolve().parents[1] / "VERSION").read_text(encoding="utf-8").strip()
 
@@ -145,12 +147,104 @@ def markdown(report: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _sarif_rule_id(finding: dict[str, Any]) -> str:
+    source = _text(finding, "source")
+    prefix = {"ModRelease Studio": "MRS", "Paradox Mod Workbench": "PMW"}.get(source)
+    if not prefix:
+        prefix = re.sub(r"[^A-Za-z0-9]+", "-", source).strip("-").upper()[:16] or "SCANNER"
+    code = _text(finding, "code", "UNKNOWN")
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "-", code).strip("-._")[:64] or "UNKNOWN"
+    digest = hashlib.sha256(code.encode("utf-8")).hexdigest()[:12]
+    return f"{prefix}-{slug}-{digest}"
+
+
+def _sarif_level(severity: str) -> str:
+    return {"error": "error", "warning": "warning", "notice": "note"}.get(severity.lower(), "note")
+
+
+def _sarif_message(value: str) -> str:
+    bidi_controls = {
+        "\u061c", "\u200e", "\u200f", "\u202a", "\u202b", "\u202c", "\u202d", "\u202e",
+        "\u2066", "\u2067", "\u2068", "\u2069",
+    }
+    visible = []
+    for char in value[:1000]:
+        if char in bidi_controls:
+            visible.append(f"\\u{ord(char):04X}")
+        else:
+            visible.append(_visible_text(char, preserve_line_breaks=True))
+    return "".join(visible)
+
+
+def _sarif_uri(path: str) -> str:
+    """Return a checkout-relative URI and never serialize a machine-local path."""
+    normalized = path.replace("\\", "/").strip()
+    absolute = normalized.startswith("/") or bool(re.match(r"^[A-Za-z]:/", normalized)) or normalized.lower().startswith("file:")
+    if absolute:
+        normalized = normalized.rstrip("/").rsplit("/", 1)[-1]
+    parts: list[str] = []
+    for part in normalized.split("/"):
+        if part in ("", "."):
+            continue
+        if part == "..":
+            if parts:
+                parts.pop()
+            continue
+        parts.append(part)
+    return quote("/".join(parts), safe="/-._~")
+
+
+def sarif_report(report: dict[str, Any]) -> dict[str, Any]:
+    """Render the unified report as SARIF 2.1.0 with checkout-relative paths."""
+    findings = [item for item in report.get("findings", []) if isinstance(item, dict)]
+    rules: dict[str, dict[str, Any]] = {}
+    results = []
+    for finding in findings:
+        rule_id = _sarif_rule_id(finding)
+        source = _text(finding, "source", "Unknown scanner")
+        code = _text(finding, "code", "UNKNOWN")
+        rules.setdefault(rule_id, {
+            "id": rule_id,
+            "name": _visible_text(code),
+            "shortDescription": {"text": _visible_text(f"{source}: {code}")[:256]},
+        })
+        result: dict[str, Any] = {
+            "ruleId": rule_id,
+            "level": _sarif_level(_text(finding, "severity", "notice")),
+            "message": {"text": _sarif_message(_text(finding, "message", "Finding without a message"))},
+        }
+        path = _text(finding, "path")
+        if path:
+            physical_location: dict[str, Any] = {"artifactLocation": {"uri": _sarif_uri(path)}}
+            line = finding.get("line")
+            if isinstance(line, int) and not isinstance(line, bool) and line > 0:
+                physical_location["region"] = {"startLine": line}
+            result["locations"] = [{"physicalLocation": physical_location}]
+        results.append(result)
+
+    tool = _text(report, "tool", "Paradox Mod Quality Gate")
+    version = _text(report, "version", VERSION)
+    return {
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [{
+            "tool": {"driver": {
+                "name": tool,
+                "version": version,
+                "rules": list(rules.values()),
+            }},
+            "results": results,
+        }],
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--modrelease", required=True)
     parser.add_argument("--workbench", required=True)
     parser.add_argument("--json-out", required=True)
     parser.add_argument("--md-out", required=True)
+    parser.add_argument("--sarif-out")
     parser.add_argument("--gate", choices=("error", "warning", "never"), default="error")
     parser.add_argument("--github", action="store_true")
     args = parser.parse_args(argv)
@@ -162,6 +256,8 @@ def main(argv: list[str] | None = None) -> int:
     Path(args.json_out).write_text(json_report(report) + "\n", encoding="utf-8")
     rendered = markdown(report)
     Path(args.md_out).write_text(rendered + "\n", encoding="utf-8")
+    if args.sarif_out:
+        Path(args.sarif_out).write_text(json.dumps(sarif_report(report), ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
     if args.github:
         summary = os.environ.get("GITHUB_STEP_SUMMARY")
         if summary:

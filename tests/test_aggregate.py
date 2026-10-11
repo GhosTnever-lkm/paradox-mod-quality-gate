@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "runner"))
-from aggregate import _annotation, json_report, markdown, normalize  # noqa: E402
+from aggregate import VERSION, _annotation, json_report, markdown, normalize, sarif_report  # noqa: E402
 from workspace import resolve_workspace_path  # noqa: E402
 
 
@@ -49,6 +49,74 @@ class WorkspacePathTests(unittest.TestCase):
 
 
 class AggregateTests(unittest.TestCase):
+    def test_sarif_maps_findings_and_keeps_only_relative_locations(self):
+        report = normalize(
+            {"version": "0.3.58", "findings": [
+                {"code": "SHARED", "severity": "ERROR", "path": r"C:\Users\alice\mod\events\bad.txt", "message": "bad\u202eexe"},
+                {"code": "SHARED", "severity": "WARNING", "path": "common/other file.txt", "message": "review"},
+            ]},
+            {"version": "0.2.2", "findings": [
+                {"code": "SHARED", "severity": "INFO", "path": "events/test.txt", "line": 7, "message": "note"},
+                {"code": "NO_LINE", "severity": "ERROR", "path": "events/no-line.txt", "line": 0, "message": "no line"},
+            ]},
+        )
+        sarif = sarif_report(report)
+        self.assertEqual(sarif["version"], "2.1.0")
+        self.assertEqual(sarif["$schema"], "https://json.schemastore.org/sarif-2.1.0.json")
+        run = sarif["runs"][0]
+        self.assertEqual(run["tool"]["driver"]["name"], "Paradox Mod Quality Gate")
+        self.assertEqual(run["tool"]["driver"]["version"], VERSION)
+        self.assertEqual(len(run["tool"]["driver"]["rules"]), 3)
+        self.assertEqual([item["level"] for item in run["results"]], ["error", "warning", "note", "error"])
+        scanner_rule_ids = [item["ruleId"] for item in run["results"][:3]]
+        self.assertNotEqual(scanner_rule_ids[0], scanner_rule_ids[2])
+        self.assertIn("MRS-SHARED-", scanner_rule_ids[0])
+        self.assertIn("PMW-SHARED-", scanner_rule_ids[2])
+        first_location = run["results"][0]["locations"][0]["physicalLocation"]
+        self.assertEqual(first_location["artifactLocation"]["uri"], "bad.txt")
+        self.assertNotIn("region", first_location)
+        line_location = run["results"][2]["locations"][0]["physicalLocation"]
+        self.assertEqual(line_location["region"], {"startLine": 7})
+        no_line_location = run["results"][3]["locations"][0]["physicalLocation"]
+        self.assertNotIn("region", no_line_location)
+        self.assertIn(r"\u202E", run["results"][0]["message"]["text"])
+        serialized = json.dumps(sarif, ensure_ascii=True)
+        self.assertNotIn("C:\\\\Users", serialized)
+        self.assertNotIn("/home/", serialized)
+        self.assertNotIn("uriBaseId", serialized)
+        self.assertNotIn("originalUriBaseIds", serialized)
+        for item in run["results"]:
+            for location in item.get("locations", []):
+                uri = location["physicalLocation"]["artifactLocation"]["uri"]
+                self.assertFalse(uri.startswith(("/", "\\\\")))
+                self.assertNotRegex(uri, r"^[A-Za-z]:")
+                self.assertNotIn("file:", uri.lower())
+
+    def test_sarif_with_no_findings_has_an_empty_results_list(self):
+        sarif = sarif_report(normalize({"findings": []}, {"findings": []}))
+        self.assertEqual(sarif["runs"][0]["tool"]["driver"]["rules"], [])
+        self.assertEqual(sarif["runs"][0]["results"], [])
+
+    def test_cli_writes_sarif_before_returning_a_blocking_gate_status(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            modrelease = root / "modrelease.json"
+            workbench = root / "workbench.json"
+            sarif_path = root / "report.sarif"
+            modrelease.write_text(json.dumps({"findings": [{
+                "code": "BLOCK", "severity": "ERROR", "path": "common/blocked.txt", "message": "blocked",
+            }]}), encoding="utf-8")
+            workbench.write_text(json.dumps({"findings": []}), encoding="utf-8")
+            result = subprocess.run([
+                sys.executable, str(ROOT / "runner/aggregate.py"),
+                "--modrelease", str(modrelease), "--workbench", str(workbench),
+                "--json-out", str(root / "report.json"), "--md-out", str(root / "report.md"),
+                "--sarif-out", str(sarif_path), "--gate", "error",
+            ], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertTrue(sarif_path.is_file())
+            self.assertEqual(json.loads(sarif_path.read_text(encoding="utf-8"))["runs"][0]["results"][0]["level"], "error")
+
     def test_normalizes_findings_without_local_paths(self):
         report = normalize(
             {"version": "0.2.1", "target": "C:/Users/alice/mod", "findings": [

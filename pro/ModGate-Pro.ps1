@@ -101,12 +101,12 @@ $scan.Add_Click({
     $mrPath = Join-Path $target 'combined-modrelease.json'
     $mr | ConvertTo-Json -Depth 30 | Set-Content -Encoding UTF8 $mrPath
     $aggregate = Join-Path $repo 'runner/aggregate.py'
-    $unifiedJson = Join-Path $target 'report.json'; $unifiedMd = Join-Path $target 'report.md'
-    $proc = Invoke-Tool $python.Source @($aggregate,'--modrelease',$mrPath,'--workbench',$pmwJson,'--json-out',$unifiedJson,'--md-out',$unifiedMd,'--gate','never')
+    $unifiedJson = Join-Path $target 'report.json'; $unifiedMd = Join-Path $target 'report.md'; $unifiedSarif = Join-Path $target 'report.sarif'
+    $proc = Invoke-Tool $python.Source @($aggregate,'--modrelease',$mrPath,'--workbench',$pmwJson,'--json-out',$unifiedJson,'--md-out',$unifiedMd,'--sarif-out',$unifiedSarif,'--gate','never')
     if ($proc.ExitCode -ne 0) { throw 'Unable to build unified report.' }
     $report = Get-Content -Raw -Encoding UTF8 $unifiedJson | ConvertFrom-Json
     $report.findings | Select-Object severity,source,code,path,line,message | ConvertTo-Html -Title 'Paradox Mod Quality Gate Pro' -PreContent "<h1>Paradox Mod Quality Gate Pro</h1><p>$($report.counts.error) errors · $($report.counts.warning) warnings · $($report.counts.notice) notices</p>" | Set-Content -Encoding UTF8 (Join-Path $target 'report.html')
-    $status.Text = "Готово. HTML, Markdown и JSON отчёты сохранены: $target"
+    $status.Text = "Готово. HTML, Markdown, JSON и SARIF отчёты сохранены: $target"
     [Windows.Forms.MessageBox]::Show("Проверка завершена. Отчёты сохранены в:`n$target", 'Готово') | Out-Null
   } catch {
     $status.Text = "Ошибка: $($_.Exception.Message)"
