@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.60 - 2026-10-13
+
+- Pin ModRelease Studio v0.3.75 and Paradox Mod Workbench v0.2.6 across the Action and Pro launcher.
+- Refresh the Windows Pro bundle to v1.0.4 and align the install guide and CI version checks.
+
 ## 1.0.59 - 2026-10-13
 
 - Reject scanner reports without a `findings` array instead of treating malformed data as a clean scan.

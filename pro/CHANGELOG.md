@@ -1,5 +1,10 @@
 # Pro bundle changelog
 
+## 1.0.4 - 2026-10-13
+
+- Pin ModRelease Studio v0.3.75 and Paradox Mod Workbench v0.2.6.
+- Refresh the unified scanner launcher and product information for the current releases.
+
 ## 1.0.3 - 2026-10-13
 
 - Reject malformed scanner reports without a findings list instead of treating them as clean.
