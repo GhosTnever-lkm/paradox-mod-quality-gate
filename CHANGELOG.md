@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.45 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.62 in the GitHub Action, Pro launcher, and install guide so consumers receive fine-grained GitHub token detection.
+- Refresh release examples and scanner integration checks for v0.3.62.
+
 ## 1.0.44 - 2026-10-12
 
 - Pin Paradox Mod Workbench v0.2.4 in the GitHub Action, Windows Pro launcher, and install guide.
