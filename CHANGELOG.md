@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.43 - 2026-10-12
+
+- Refresh all README examples to Gate v1.0.43 and use checkout v7 consistently.
+
 ## 1.0.42 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.61 in the GitHub Action, Pro launcher, and install guide; refresh README examples to this release and assert the exact scanner version in CI.

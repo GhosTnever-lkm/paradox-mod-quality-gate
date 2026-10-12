@@ -222,5 +222,15 @@ class AggregateTests(unittest.TestCase):
             self.assertEqual(error.returncode, 0)
 
 
+class DocumentationConsistencyTests(unittest.TestCase):
+    def test_readme_examples_use_current_gate_and_checkout_versions(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        current_gate = f"GhosTnever-lkm/paradox-mod-quality-gate@v{VERSION}"
+        self.assertNotIn("GhosTnever-lkm/paradox-mod-quality-gate@v1.0.42", readme)
+        self.assertGreaterEqual(readme.count(current_gate), 3)
+        self.assertNotIn("actions/checkout@v6", readme)
+        self.assertGreaterEqual(readme.count("actions/checkout@v7"), 2)
+
+
 if __name__ == "__main__":
     unittest.main()
