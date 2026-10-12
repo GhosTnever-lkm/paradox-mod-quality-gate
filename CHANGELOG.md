@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.0.47 - 2026-10-12
+## 1.0.48 - 2026-10-12
 
-- Pin ModRelease Studio v0.3.64 across the GitHub Action, Pro launcher, install guide, and CI.
+- Pin ModRelease Studio v0.3.65 across the GitHub Action, Pro launcher, install guide, and CI.
 
 ## 1.0.46 - 2026-10-12
 
@@ -62,9 +62,9 @@
 
 # Changelog
 
-## 1.0.47 - 2026-10-12
+## 1.0.48 - 2026-10-12
 
-- Pin ModRelease Studio v0.3.64 across the GitHub Action, Pro launcher, install guide, and CI.
+- Pin ModRelease Studio v0.3.65 across the GitHub Action, Pro launcher, install guide, and CI.
 
 ## 1.0.33 - 2026-10-11
 
