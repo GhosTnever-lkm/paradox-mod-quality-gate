@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.42 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.61 in the GitHub Action, Pro launcher, and install guide; refresh README examples to this release and assert the exact scanner version in CI.
+
 ## 1.0.41 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.60 in the GitHub Action, Pro launcher, and install guide; assert the exact scanner version in CI.
