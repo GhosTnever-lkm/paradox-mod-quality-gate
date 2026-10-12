@@ -1,9 +1,12 @@
 # Paradox Mod Quality Gate Pro Edition
 
+Version: **1.0.1**. This Windows convenience bundle runs the current free scanners: ModRelease Studio v0.3.72 and Paradox Mod Workbench v0.2.5.
+
 ## Included
 
 - `Start-Pro.ps1` installs the pinned free scanner versions, then opens the Windows GUI.
 - `ModGate-Pro.ps1` accepts multiple mod folders and ZIPs, runs both scanners, and exports unified JSON, Markdown, and HTML reports.
+- The unified report is also exported as SARIF 2.1.0 for optional GitHub Code Scanning upload.
 - A dated output folder is created under **Documents\Paradox Mod Quality Gate Reports** for each run.
 
 ## Requirements
@@ -11,6 +14,8 @@
 - Windows 10/11, PowerShell 7, Python 3.11+, and internet access for the first scanner installation.
 - No administrator access is needed. The scripts do not change the execution policy; launch them from PowerShell 7 with `-File`.
 - For an offline run after installing both scanners, start with `-SkipInstall`.
+
+See `CHANGELOG.md` for Pro bundle changes. This is a convenience package; it does not add hidden scanner rules, validate game launch, or guarantee mod compatibility.
 
 ## Start
 

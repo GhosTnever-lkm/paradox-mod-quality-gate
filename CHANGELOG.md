@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.57 - 2026-10-12
+
+- Add a reproducible Windows Pro package builder and refresh the paid bundle to Pro v1.0.1 with current scanner pins.
+- Update README examples to the current GitHub Action release.
+
 ## 1.0.56 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.72 across the GitHub Action, Pro launcher, install guide, and CI.
