@@ -199,6 +199,23 @@ class AggregateTests(unittest.TestCase):
             self.assertEqual(result.returncode, 2)
             self.assertIn("invalid", result.stderr)
 
+    def test_missing_findings_array_fails_closed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "malformed.json").write_text("{}", encoding="utf-8")
+            (root / "workbench.json").write_text(json.dumps({"findings": []}), encoding="utf-8")
+            result = subprocess.run([
+                sys.executable, str(ROOT / "runner/aggregate.py"),
+                "--modrelease", str(root / "malformed.json"),
+                "--workbench", str(root / "workbench.json"),
+                "--json-out", str(root / "out.json"), "--md-out", str(root / "out.md"),
+                "--gate", "error",
+            ], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("unexpected format", result.stderr)
+            self.assertFalse((root / "out.json").exists())
+            self.assertFalse((root / "out.md").exists())
+
     def test_never_does_not_fail_on_findings(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

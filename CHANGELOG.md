@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.59 - 2026-10-13
+
+- Reject scanner reports without a `findings` array instead of treating malformed data as a clean scan.
+- Refresh the Windows Pro bundle to v1.0.3 with the fail-closed report aggregator.
+- Update examples and package regression checks for the current Action release.
+
 ## 1.0.58 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.73 across the Action, Pro launcher, install guide, and CI.

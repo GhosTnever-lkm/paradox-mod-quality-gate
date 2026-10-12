@@ -77,7 +77,7 @@ def _load(path: str, label: str) -> dict[str, Any]:
         data = json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"{label} report is missing or invalid: {exc.__class__.__name__}") from None
-    if not isinstance(data, dict) or not isinstance(data.get("findings", []), list):
+    if not isinstance(data, dict) or "findings" not in data or not isinstance(data["findings"], list):
         raise ValueError(f"{label} report has an unexpected format")
     return data
 
