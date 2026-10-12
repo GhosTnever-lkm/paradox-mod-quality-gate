@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MODRELEASE_VERSION = "0.3.73"
+MODRELEASE_VERSION = "0.3.75"
 sys.path.insert(0, str(ROOT / "runner"))
 from aggregate import VERSION, _annotation, json_report, markdown, normalize, sarif_report  # noqa: E402
 from workspace import resolve_workspace_path  # noqa: E402
@@ -250,7 +250,7 @@ class DocumentationConsistencyTests(unittest.TestCase):
         self.assertGreaterEqual(readme.count("actions/checkout@v7"), 2)
 
     def test_workbench_pins_match_the_current_release(self):
-        pin = "paradox-mod-workbench.git@v0.2.5"
+        pin = "paradox-mod-workbench.git@v0.2.6"
         self.assertIn(pin, (ROOT / "action.yml").read_text(encoding="utf-8"))
         self.assertIn(pin, (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8"))
         self.assertIn(pin, (ROOT / "README.md").read_text(encoding="utf-8"))
