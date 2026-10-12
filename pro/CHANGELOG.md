@@ -1,5 +1,10 @@
 # Pro bundle changelog
 
+## 1.0.2 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.73.
+- Refresh the launcher and product information for the matching scanner release.
+
 ## 1.0.1 - 2026-10-12
 
 - Refresh the Windows launcher and report builder from Paradox Mod Quality Gate v1.0.57.
