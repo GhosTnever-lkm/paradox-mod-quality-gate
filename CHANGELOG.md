@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.47 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.64 across the GitHub Action, Pro launcher, install guide, and CI.
+
 ## 1.0.46 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.63 in the Action, Windows Pro launcher, install guide, and CI so all users receive the corrected release guidance and current product page.
@@ -57,6 +61,10 @@
 - Assert the exact scanner version in CI.
 
 # Changelog
+
+## 1.0.47 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.64 across the GitHub Action, Pro launcher, install guide, and CI.
 
 ## 1.0.33 - 2026-10-11
 
