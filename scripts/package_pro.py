@@ -27,6 +27,11 @@ PACKAGE_FILES = (
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 
 
+def _normalize_line_endings(content: bytes) -> bytes:
+    """Make text bundle contents independent of the checkout's OS newline style."""
+    return content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
 def package_pro(output_dir: Path) -> tuple[Path, Path]:
     """Build the allowlisted ZIP and its SHA-256 sidecar."""
     output_dir = output_dir.resolve()
@@ -51,7 +56,8 @@ def package_pro(output_dir: Path) -> tuple[Path, Path]:
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.create_system = 3
                 info.external_attr = 0o100644 << 16
-                archive.writestr(info, (ROOT / relative).read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+                content = _normalize_line_endings((ROOT / relative).read_bytes())
+                archive.writestr(info, content, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
         os.replace(temporary, output)
     finally:
         temporary.unlink(missing_ok=True)
