@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.53 - 2026-10-12
+
+- Pin Paradox Mod Workbench v0.2.5 across the Action, Windows Pro launcher, install guide, and CI.
+
 ## 1.0.52 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.69 across the GitHub Action, Pro launcher, install guide, and CI; update release examples and add a pin-consistency regression check.
