@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.46 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.63 in the Action, Windows Pro launcher, install guide, and CI so all users receive the corrected release guidance and current product page.
+- Refresh README examples to Paradox Mod Quality Gate v1.0.46.
+
 ## 1.0.45 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.62 in the GitHub Action, Pro launcher, and install guide so consumers receive fine-grained GitHub token detection.
