@@ -1,6 +1,6 @@
 # Paradox Mod Quality Gate Pro Edition
 
-Version: **1.0.2**. This Windows convenience bundle runs the current free scanners: ModRelease Studio v0.3.73 and Paradox Mod Workbench v0.2.5.
+Version: **1.0.3**. This Windows convenience bundle runs the current free scanners: ModRelease Studio v0.3.73 and Paradox Mod Workbench v0.2.5.
 
 ## Included
 
@@ -15,7 +15,7 @@ Version: **1.0.2**. This Windows convenience bundle runs the current free scanne
 - No administrator access is needed. The scripts do not change the execution policy; launch them from PowerShell 7 with `-File`.
 - For an offline run after installing both scanners, start with `-SkipInstall`.
 
-See `CHANGELOG.md` for Pro bundle changes. This is a convenience package; it does not add hidden scanner rules, validate game launch, or guarantee mod compatibility.
+See `CHANGELOG.md` for Pro bundle changes. The report aggregator rejects malformed scanner reports without a findings list instead of labeling them clean. This is a convenience package; it does not add hidden scanner rules, validate game launch, or guarantee mod compatibility.
 
 ## Start
 

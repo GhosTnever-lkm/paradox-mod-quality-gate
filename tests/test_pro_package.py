@@ -14,12 +14,12 @@ class ProPackageTests(unittest.TestCase):
     def test_builds_versioned_allowlisted_archive_and_checksum(self):
         with tempfile.TemporaryDirectory() as temp:
             archive_path, sidecar_path = package_pro(Path(temp))
-            self.assertEqual(archive_path.name, "Paradox-Mod-Quality-Gate-Pro-v1.0.2.zip")
+            self.assertEqual(archive_path.name, "Paradox-Mod-Quality-Gate-Pro-v1.0.3.zip")
             with zipfile.ZipFile(archive_path) as archive:
                 self.assertIsNone(archive.testzip())
                 self.assertEqual(set(archive.namelist()), set(PACKAGE_FILES))
-                self.assertEqual(archive.read("VERSION").decode().strip(), "1.0.58")
-                self.assertEqual(archive.read("pro/VERSION").decode().strip(), "1.0.2")
+                self.assertEqual(archive.read("VERSION").decode().strip(), "1.0.59")
+                self.assertEqual(archive.read("pro/VERSION").decode().strip(), "1.0.3")
                 launcher = archive.read("pro/Start-Pro.ps1").decode()
                 self.assertIn("modrelease-studio.git@v0.3.73", launcher)
                 self.assertIn("paradox-mod-workbench.git@v0.2.5", launcher)

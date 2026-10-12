@@ -1,5 +1,10 @@
 # Pro bundle changelog
 
+## 1.0.3 - 2026-10-13
+
+- Reject malformed scanner reports without a findings list instead of treating them as clean.
+- Include the fail-closed aggregator from the free release.
+
 ## 1.0.2 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.73.
