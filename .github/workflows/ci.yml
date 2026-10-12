@@ -44,7 +44,7 @@ jobs:
           assert any(item["level"] == "error" for item in report["runs"][0]["results"])
           PY
       - name: Assert exact installed ModRelease Studio version
-        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.69", actual'
+        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.70", actual'
       - name: Assert exact installed Paradox Mod Workbench version
         run: python -c 'from importlib.metadata import version; actual = version("paradox-mod-workbench"); print(f"paradox-mod-workbench {actual}"); assert actual == "0.2.5", actual'
       - name: Verify installed scanner traversal policy

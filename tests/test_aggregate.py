@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MODRELEASE_VERSION = "0.3.69"
+MODRELEASE_VERSION = "0.3.70"
 sys.path.insert(0, str(ROOT / "runner"))
 from aggregate import VERSION, _annotation, json_report, markdown, normalize, sarif_report  # noqa: E402
 from workspace import resolve_workspace_path  # noqa: E402
@@ -244,7 +244,7 @@ class DocumentationConsistencyTests(unittest.TestCase):
             with self.subTest(path=relative):
                 text = (ROOT / relative).read_text(encoding="utf-8")
                 self.assertIn(pin, text)
-                self.assertNotIn("modrelease-studio.git@v0.3.68", text)
+                self.assertNotIn("modrelease-studio.git@v0.3.69", text)
         ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
         self.assertIn(f'assert actual == "{MODRELEASE_VERSION}"', ci)
 
