@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.52 - 2026-10-12
+
+- Pin ModRelease Studio v0.3.69 across the GitHub Action, Pro launcher, install guide, and CI; update release examples and add a pin-consistency regression check.
+
 ## 1.0.51 - 2026-10-12
 
 - Pin ModRelease Studio v0.3.68 across the GitHub Action, Pro launcher, install guide, and CI.
