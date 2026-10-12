@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.44 - 2026-10-12
+
+- Pin Paradox Mod Workbench v0.2.4 in the GitHub Action, Windows Pro launcher, and install guide.
+- Verify the installed Workbench version and prevent stale release examples in README from returning.
+
 ## 1.0.43 - 2026-10-12
 
 - Refresh all README examples to Gate v1.0.43 and use checkout v7 consistently.

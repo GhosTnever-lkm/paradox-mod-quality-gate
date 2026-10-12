@@ -226,10 +226,16 @@ class DocumentationConsistencyTests(unittest.TestCase):
     def test_readme_examples_use_current_gate_and_checkout_versions(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         current_gate = f"GhosTnever-lkm/paradox-mod-quality-gate@v{VERSION}"
-        self.assertNotIn("GhosTnever-lkm/paradox-mod-quality-gate@v1.0.42", readme)
+        self.assertNotIn("GhosTnever-lkm/paradox-mod-quality-gate@v1.0.43", readme)
         self.assertGreaterEqual(readme.count(current_gate), 3)
         self.assertNotIn("actions/checkout@v6", readme)
         self.assertGreaterEqual(readme.count("actions/checkout@v7"), 2)
+
+    def test_workbench_pins_match_the_current_release(self):
+        pin = "paradox-mod-workbench.git@v0.2.4"
+        self.assertIn(pin, (ROOT / "action.yml").read_text(encoding="utf-8"))
+        self.assertIn(pin, (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8"))
+        self.assertIn(pin, (ROOT / "README.md").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
