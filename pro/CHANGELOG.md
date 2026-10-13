@@ -1,5 +1,10 @@
 # Pro bundle changelog
 
+## 1.0.7 - 2026-10-13
+
+- Pin Paradox Mod Workbench v0.2.7 for script diagnostics in all Clausewitz script roots.
+- Rebuild the Windows Pro bundle with current scanner versions.
+
 ## 1.0.6 - 2026-10-13
 
 - Pin ModRelease Studio v0.3.77 in the Windows launcher.

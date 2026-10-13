@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.63 - 2026-10-13
+
+- Pin Paradox Mod Workbench v0.2.7 across the Action, docs, CI, and Pro launcher.
+- Refresh the Windows Pro bundle to v1.0.7.
+
 ## 1.0.62 - 2026-10-13
 
 - Pin ModRelease Studio v0.3.77 across the GitHub Action, Pro launcher, install guide, and CI.
