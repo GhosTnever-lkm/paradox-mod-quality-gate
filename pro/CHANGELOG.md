@@ -1,5 +1,10 @@
 # Pro bundle changelog
 
+## 1.0.6 - 2026-10-13
+
+- Pin ModRelease Studio v0.3.77 in the Windows launcher.
+- Rebuild the paid bundle with the updated scanner.
+
 ## 1.0.5 - 2026-10-13
 
 - Pin the cross-platform reproducible archive build and current scanner releases.

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.62 - 2026-10-13
+
+- Pin ModRelease Studio v0.3.77 across the GitHub Action, Pro launcher, install guide, and CI.
+- Refresh the Windows Pro bundle to v1.0.6 and update its package regression checks.
+
 ## 1.0.61 - 2026-10-13
 
 - Normalize text line endings in the Pro ZIP builder so Windows and Linux produce identical archives.
