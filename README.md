@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.62
+      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.63
         with:
           mod-path: .
           gate: error
@@ -56,7 +56,7 @@ jobs:
 Передайте `config-file` с TOML-политикой ModRelease Studio, чтобы включить проверки обязательных путей. Путь должен быть внутри checkout. `ERROR`-находка попадёт в общий отчёт и заблокирует стандартный `gate: error`; прошедшая политика не блокирует запуск. CI проверяет это на фикстуре с намеренно отсутствующим файлом.
 
 ```yaml
-- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.62
+- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.63
   with:
     mod-path: path/to/mod
     config-file: path/to/mod/modrelease.toml
@@ -89,7 +89,7 @@ jobs:
       - uses: actions/checkout@v7
       - name: Check mod release
         id: quality
-        uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.62
+        uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.63
         with:
           mod-path: .
           gate: error
@@ -107,7 +107,7 @@ jobs:
 
 ```powershell
 python -m pip install "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.77"
-python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.6"
+python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.7"
 modrelease scan . --json-out modrelease.json --md-out modrelease.md
 pmw scan . --format json --output workbench.json
 python runner/aggregate.py --modrelease modrelease.json --workbench workbench.json --json-out report.json --md-out report.md --sarif-out report.sarif --gate error
@@ -115,7 +115,7 @@ python runner/aggregate.py --modrelease modrelease.json --workbench workbench.js
 
 ## Платный Pro-набор
 
-Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition v1.0.6** — готовый Windows-пакет за 50 ₽: графический пакетный запуск папок/ZIP и HTML-сводка наряду с JSON, Markdown и SARIF. Он использует те же открытые сканеры ModRelease Studio v0.3.77 и Paradox Mod Workbench v0.2.6; дополнительные game-specific правила не заявляются. [Купить на Boosty](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). Бесплатный GitHub Action и CLI доступны в этом репозитории.
+Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition v1.0.7** — готовый Windows-пакет за 50 ₽: графический пакетный запуск папок/ZIP и HTML-сводка наряду с JSON, Markdown и SARIF. Он использует те же открытые сканеры ModRelease Studio v0.3.77 и Paradox Mod Workbench v0.2.7; дополнительные game-specific правила не заявляются. [Купить на Boosty](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). Бесплатный GitHub Action и CLI доступны в этом репозитории.
 
 Подробнее о бесплатной версии и релизах: [открытый анонс](https://boosty.to/azizazimov/posts/b17a51a0-9dbf-4427-b810-700cfbfef3ab).
 

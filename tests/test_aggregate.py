@@ -250,7 +250,7 @@ class DocumentationConsistencyTests(unittest.TestCase):
         self.assertGreaterEqual(readme.count("actions/checkout@v7"), 2)
 
     def test_workbench_pins_match_the_current_release(self):
-        pin = "paradox-mod-workbench.git@v0.2.6"
+        pin = "paradox-mod-workbench.git@v0.2.7"
         self.assertIn(pin, (ROOT / "action.yml").read_text(encoding="utf-8"))
         self.assertIn(pin, (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8"))
         self.assertIn(pin, (ROOT / "README.md").read_text(encoding="utf-8"))
