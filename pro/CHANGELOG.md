@@ -1,3 +1,7 @@
+## 1.0.9 - 2026-10-13
+
+- Update the bundled ModRelease Studio scanner to v0.3.78.
+
 # Pro bundle changelog
 
 ## 1.0.8 - 2026-10-13
