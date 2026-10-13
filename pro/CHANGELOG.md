@@ -1,5 +1,9 @@
 # Pro bundle changelog
 
+## 1.0.5 - 2026-10-13
+
+- Pin the cross-platform reproducible archive build and current scanner releases.
+
 ## 1.0.4 - 2026-10-13
 
 - Pin ModRelease Studio v0.3.75 and Paradox Mod Workbench v0.2.6.

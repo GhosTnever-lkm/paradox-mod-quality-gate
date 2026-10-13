@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.61 - 2026-10-13
+
+- Normalize text line endings in the Pro ZIP builder so Windows and Linux produce identical archives.
+- Add a regression test that builds the paid package from LF and CRLF source trees.
+- Refresh the Windows Pro bundle to v1.0.5 and align the README and package checks.
+
 ## 1.0.60 - 2026-10-13
 
 - Pin ModRelease Studio v0.3.75 and Paradox Mod Workbench v0.2.6 across the Action and Pro launcher.
