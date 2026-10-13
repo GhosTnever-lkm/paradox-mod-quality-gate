@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.64 - 2026-10-13
+
+- Document the no-reinstall -SkipInstall launch path for the Windows Pro bundle after the pinned scanners are installed.
+- Refresh the bundled Pro package to v1.0.8.
+
 ## 1.0.63 - 2026-10-13
 
 - Pin Paradox Mod Workbench v0.2.7 across the Action, docs, CI, and Pro launcher.

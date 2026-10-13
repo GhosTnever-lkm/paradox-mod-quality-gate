@@ -1,6 +1,6 @@
 # Paradox Mod Quality Gate Pro Edition
 
-Version: **1.0.7**. This Windows convenience bundle runs the current free scanners: ModRelease Studio v0.3.77 and Paradox Mod Workbench v0.2.7.
+Version: **1.0.8**. This Windows convenience bundle runs the current free scanners: ModRelease Studio v0.3.77 and Paradox Mod Workbench v0.2.7.
 
 ## Included
 
@@ -26,3 +26,12 @@ pwsh -NoProfile -File .\Start-Pro.ps1
 ```
 
 The interface only launches the free scanner tools. A report with no findings is not proof that the game launches or that two mods are fully compatible.
+
+
+### Reusing an existing scanner installation
+
+The first launch installs the pinned scanner packages and therefore needs an internet connection. After both packages are installed, run without reinstalling them:
+
+```powershell
+pwsh -NoProfile -File .\Start-Pro.ps1 -SkipInstall
+```

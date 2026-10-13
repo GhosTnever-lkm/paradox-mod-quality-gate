@@ -1,5 +1,10 @@
 # Pro bundle changelog
 
+## 1.0.8 - 2026-10-13
+
+- Document offline reuse of already-installed scanners via Start-Pro.ps1 -SkipInstall.
+- Refresh package README and version metadata.
+
 ## 1.0.7 - 2026-10-13
 
 - Pin Paradox Mod Workbench v0.2.7 for script diagnostics in all Clausewitz script roots.
