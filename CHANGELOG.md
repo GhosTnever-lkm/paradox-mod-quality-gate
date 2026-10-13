@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.65 - 2026-10-13
+
+- Pin ModRelease Studio v0.3.78 across the GitHub Action and bundled Windows Pro launcher.
+- Refresh the Pro package to v1.0.9 and update integration/package regressions.
+
 ## 1.0.64 - 2026-10-13
 
 - Document the no-reinstall -SkipInstall launch path for the Windows Pro bundle after the pinned scanners are installed.
