@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MODRELEASE_VERSION = "0.3.78"
+MODRELEASE_VERSION = "0.3.81"
 sys.path.insert(0, str(ROOT / "runner"))
 from aggregate import VERSION, _annotation, json_report, markdown, normalize, sarif_report  # noqa: E402
 from workspace import resolve_workspace_path  # noqa: E402
@@ -257,13 +257,19 @@ class DocumentationConsistencyTests(unittest.TestCase):
 
     def test_modrelease_pins_match_the_current_release(self):
         pin = f"modrelease-studio.git@v{MODRELEASE_VERSION}"
-        for relative in ("action.yml", "pro/Start-Pro.ps1", "README.md"):
+        for relative in ("action.yml", "README.md"):
             with self.subTest(path=relative):
                 text = (ROOT / relative).read_text(encoding="utf-8")
                 self.assertIn(pin, text)
                 self.assertNotIn("modrelease-studio.git@v0.3.69", text)
         ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
         self.assertIn(f'assert actual == "{MODRELEASE_VERSION}"', ci)
+
+    def test_pro_bundle_documents_its_separately_pinned_scanner(self):
+        launcher = (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8")
+        pro_readme = (ROOT / "pro/README.md").read_text(encoding="utf-8")
+        self.assertIn("modrelease-studio.git@v0.3.78", launcher)
+        self.assertIn("ModRelease Studio v0.3.78", pro_readme)
 
     def test_readme_does_not_publish_current_version_as_stale_example(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

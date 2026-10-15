@@ -20,7 +20,7 @@ class ProPackageTests(unittest.TestCase):
             with zipfile.ZipFile(archive_path) as archive:
                 self.assertIsNone(archive.testzip())
                 self.assertEqual(set(archive.namelist()), set(PACKAGE_FILES))
-                self.assertEqual(archive.read("VERSION").decode().strip(), "1.0.65")
+                self.assertEqual(archive.read("VERSION").decode().strip(), "1.0.66")
                 self.assertEqual(archive.read("pro/VERSION").decode().strip(), "1.0.9")
                 launcher = archive.read("pro/Start-Pro.ps1").decode()
                 self.assertIn("modrelease-studio.git@v0.3.78", launcher)

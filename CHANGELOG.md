@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.66 - 2026-10-15
+
+- Pin the free GitHub Action and CLI installation example to ModRelease Studio v0.3.81, which fixes absolute path disclosure in filesystem error reports.
+- Keep the separately versioned Pro v1.0.9 bundle pinned to ModRelease Studio v0.3.78; the Pro archive itself is not refreshed by this Action release.
+
 ## 1.0.65 - 2026-10-13
 
 - Pin ModRelease Studio v0.3.78 across the GitHub Action and bundled Windows Pro launcher.
