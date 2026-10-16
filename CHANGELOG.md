@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.67 - 2026-10-17
+
+- Pin the free GitHub Action and CLI installation example to ModRelease Studio v0.3.82, which detects secrets in environment files and quoted AWS secret-key fields.
+- Keep the separately versioned Pro v1.0.9 bundle pinned to ModRelease Studio v0.3.78; this Action release does not refresh its archive.
+
 ## 1.0.66 - 2026-10-15
 
 - Pin the free GitHub Action and CLI installation example to ModRelease Studio v0.3.81, which fixes absolute path disclosure in filesystem error reports.
