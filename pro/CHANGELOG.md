@@ -1,8 +1,13 @@
+# Pro bundle changelog
+
+## 1.0.10 - 2026-10-20
+
+- Update the bundled scanners to ModRelease Studio v0.3.82 and Paradox Mod Workbench v0.2.8.
+- Include the latest secret-detection, traversal, and `replace_path` parsing fixes in the Windows package.
+
 ## 1.0.9 - 2026-10-13
 
 - Update the bundled ModRelease Studio scanner to v0.3.78.
-
-# Pro bundle changelog
 
 ## 1.0.8 - 2026-10-13
 

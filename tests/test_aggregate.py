@@ -257,11 +257,11 @@ class DocumentationConsistencyTests(unittest.TestCase):
         ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
         self.assertIn('assert actual == "0.2.8"', ci)
 
-    def test_pro_bundle_keeps_its_separately_pinned_workbench(self):
+    def test_pro_bundle_uses_current_workbench_release(self):
         launcher = (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8")
         pro_readme = (ROOT / "pro/README.md").read_text(encoding="utf-8")
-        self.assertIn("paradox-mod-workbench.git@v0.2.7", launcher)
-        self.assertIn("Paradox Mod Workbench v0.2.7", pro_readme)
+        self.assertIn("paradox-mod-workbench.git@v0.2.8", launcher)
+        self.assertIn("Paradox Mod Workbench v0.2.8", pro_readme)
 
     def test_modrelease_pins_match_the_current_release(self):
         pin = f"modrelease-studio.git@v{MODRELEASE_VERSION}"
@@ -273,11 +273,11 @@ class DocumentationConsistencyTests(unittest.TestCase):
         ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
         self.assertIn(f'assert actual == "{MODRELEASE_VERSION}"', ci)
 
-    def test_pro_bundle_documents_its_separately_pinned_scanner(self):
+    def test_pro_bundle_documents_current_scanner_release(self):
         launcher = (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8")
         pro_readme = (ROOT / "pro/README.md").read_text(encoding="utf-8")
-        self.assertIn("modrelease-studio.git@v0.3.78", launcher)
-        self.assertIn("ModRelease Studio v0.3.78", pro_readme)
+        self.assertIn("modrelease-studio.git@v0.3.82", launcher)
+        self.assertIn("ModRelease Studio v0.3.82", pro_readme)
 
     def test_readme_does_not_publish_current_version_as_stale_example(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
