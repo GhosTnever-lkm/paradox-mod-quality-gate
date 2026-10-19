@@ -249,11 +249,19 @@ class DocumentationConsistencyTests(unittest.TestCase):
         self.assertNotIn("actions/checkout@v6", readme)
         self.assertGreaterEqual(readme.count("actions/checkout@v7"), 2)
 
-    def test_workbench_pins_match_the_current_release(self):
-        pin = "paradox-mod-workbench.git@v0.2.7"
-        self.assertIn(pin, (ROOT / "action.yml").read_text(encoding="utf-8"))
-        self.assertIn(pin, (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8"))
-        self.assertIn(pin, (ROOT / "README.md").read_text(encoding="utf-8"))
+    def test_free_workbench_pin_matches_the_current_release(self):
+        pin = "paradox-mod-workbench.git@v0.2.8"
+        for relative in ("action.yml", "README.md"):
+            with self.subTest(path=relative):
+                self.assertIn(pin, (ROOT / relative).read_text(encoding="utf-8"))
+        ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+        self.assertIn('assert actual == "0.2.8"', ci)
+
+    def test_pro_bundle_keeps_its_separately_pinned_workbench(self):
+        launcher = (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8")
+        pro_readme = (ROOT / "pro/README.md").read_text(encoding="utf-8")
+        self.assertIn("paradox-mod-workbench.git@v0.2.7", launcher)
+        self.assertIn("Paradox Mod Workbench v0.2.7", pro_readme)
 
     def test_modrelease_pins_match_the_current_release(self):
         pin = f"modrelease-studio.git@v{MODRELEASE_VERSION}"
