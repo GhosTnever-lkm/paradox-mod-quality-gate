@@ -241,6 +241,14 @@ class AggregateTests(unittest.TestCase):
 
 
 class DocumentationConsistencyTests(unittest.TestCase):
+    def test_readme_only_names_the_published_action_release(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn(f"Последний опубликованный GitHub Action — v{VERSION}", readme)
+
+    def test_pending_changes_are_marked_unreleased(self):
+        changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertTrue(changelog.startswith("# Changelog\n\n## Unreleased\n"))
+
     def test_readme_examples_use_current_gate_and_checkout_versions(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         current_gate = f"GhosTnever-lkm/paradox-mod-quality-gate@v{VERSION}"
