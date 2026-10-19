@@ -115,7 +115,7 @@ python runner/aggregate.py --modrelease modrelease.json --workbench workbench.js
 
 ## Платный Pro-набор
 
-Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition v1.0.9** — готовый Windows-пакет за 50 ₽: графический пакетный запуск папок/ZIP и HTML-сводка наряду с JSON, Markdown и SARIF. Он использует те же открытые сканеры ModRelease Studio v0.3.78 и Paradox Mod Workbench v0.2.7; дополнительные game-specific правила не заявляются. [Купить на Boosty](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). Бесплатный GitHub Action v1.0.68 и CLI доступны в этом репозитории. Pro-пакет сохраняет собственные зафиксированные версии; этот релиз Action его не меняет.
+Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition v1.0.10** — готовый Windows-пакет за 50 ₽: графический пакетный запуск папок/ZIP и HTML-сводка наряду с JSON, Markdown и SARIF. Он использует те же открытые сканеры ModRelease Studio v0.3.82 и Paradox Mod Workbench v0.2.8; дополнительные game-specific правила не заявляются. [Купить на Boosty](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). Бесплатный GitHub Action v1.0.69 и CLI доступны в этом репозитории.
 
 Подробнее о бесплатной версии и релизах: [открытый анонс](https://boosty.to/azizazimov/posts/b17a51a0-9dbf-4427-b810-700cfbfef3ab).
 

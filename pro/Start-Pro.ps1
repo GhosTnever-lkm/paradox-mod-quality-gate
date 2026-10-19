@@ -9,8 +9,8 @@ if ($LASTEXITCODE -ne 0 -or $versionText -notmatch '^(\d+)\.(\d+)\.(\d+)$') { th
 if ([version]$versionText -lt [version]'3.11') { throw 'Python 3.11 or newer is required.' }
 if (-not $SkipInstall) {
     & $python.Source -m pip install --disable-pip-version-check `
-      'modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.78' `
-      'paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.7'
+      'modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.82' `
+      'paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.8'
     if ($LASTEXITCODE -ne 0) { throw 'Scanner installation failed.' }
 }
 & (Join-Path $root 'ModGate-Pro.ps1')

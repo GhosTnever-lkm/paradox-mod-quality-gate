@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.69 - 2026-10-20
+
+- Refresh the Windows Pro bundle to v1.0.10 and pin its launcher to ModRelease Studio v0.3.82 and Paradox Mod Workbench v0.2.8.
+- Add regressions that keep Pro package metadata and scanner pins aligned.
+
 ## 1.0.68 - 2026-10-20
 
 - Pin the free GitHub Action and CLI installation example to Paradox Mod Workbench v0.2.8, which retains `replace_path` declarations.
