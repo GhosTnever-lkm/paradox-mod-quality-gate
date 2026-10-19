@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.68 - 2026-10-20
+
+- Pin the free GitHub Action and CLI installation example to Paradox Mod Workbench v0.2.8, which retains `replace_path` declarations.
+- Keep the separately versioned Pro v1.0.9 package and its scanner pins unchanged; this Action release does not publish a Pro update.
+
 ## 1.0.67 - 2026-10-17
 
 - Pin the free GitHub Action and CLI installation example to ModRelease Studio v0.3.82, which detects secrets in environment files and quoted AWS secret-key fields.
