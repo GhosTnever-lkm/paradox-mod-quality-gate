@@ -7,6 +7,7 @@
 
 ## 1.0.72 - 2026-10-20
 
+- Mark v1.0.72 as the latest formal GitHub Release after publication.
 - Pin the free GitHub Action and CLI example to ModRelease Studio v0.3.87, including Python 3.11 Windows junction detection.
 - Keep the Pro package and its scanner pins unchanged.
 
