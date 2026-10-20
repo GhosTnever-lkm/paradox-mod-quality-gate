@@ -44,7 +44,46 @@ jobs:
           assert any(item["level"] == "error" for item in report["runs"][0]["results"])
           PY
       - name: Assert exact installed ModRelease Studio version
-        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.82", actual'
+        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.84", actual'
+      - name: Create a mixed-secret integration fixture
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root = Path("examples/mixed-secret-fixture")
+          root.mkdir(parents=True, exist_ok=True)
+          aws_key = "AKIA" + "1234567890ABCDEF"
+          slack_token = "xoxb-" + "123456789012-" + "FAKE" + "FAKE" + "TOKEN" + "VALUE"
+          (root / "settings.txt").write_text("aws_access_key_id=" + aws_key + chr(10) + "token=" + slack_token + chr(10), encoding="utf-8")
+          Path("aws-key-fixture.txt").write_text(aws_key, encoding="utf-8")
+          Path("slack-token-fixture.txt").write_text(slack_token, encoding="utf-8")
+          PY
+      - name: Verify the composite Action reports all matching secret categories
+        id: mixed-secret-scan
+        uses: ./
+        with:
+          mod-path: examples/mixed-secret-fixture
+          gate: never
+          artifact-name: mixed-secret-report
+      - name: Verify findings and secret redaction in unified reports
+        env:
+          JSON_REPORT: ${{ steps.mixed-secret-scan.outputs['json-report'] }}
+          MARKDOWN_REPORT: ${{ steps.mixed-secret-scan.outputs['markdown-report'] }}
+          SARIF_REPORT: ${{ steps.mixed-secret-scan.outputs['sarif-report'] }}
+          AWS_KEY_FIXTURE: aws-key-fixture.txt
+          SLACK_TOKEN_FIXTURE: slack-token-fixture.txt
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          report = json.loads(Path(os.environ["JSON_REPORT"]).read_text(encoding="utf-8"))
+          findings = {(item["source"], item["code"], item["path"]) for item in report["findings"]}
+          assert ("ModRelease Studio", "AWS_ACCESS_KEY", "settings.txt") in findings
+          assert ("ModRelease Studio", "SLACK_TOKEN", "settings.txt") in findings
+          reports = [Path(os.environ[key]).read_text(encoding="utf-8") for key in ("JSON_REPORT", "MARKDOWN_REPORT", "SARIF_REPORT")]
+          secret_values = [Path(os.environ[key]).read_text(encoding="utf-8") for key in ("AWS_KEY_FIXTURE", "SLACK_TOKEN_FIXTURE")]
+          for value in secret_values:
+              assert all(value not in rendered for rendered in reports)
+          PY
       - name: Assert exact installed Paradox Mod Workbench version
         run: python -c 'from importlib.metadata import version; actual = version("paradox-mod-workbench"); print(f"paradox-mod-workbench {actual}"); assert actual == "0.2.8", actual'
       - name: Verify installed scanner traversal policy
