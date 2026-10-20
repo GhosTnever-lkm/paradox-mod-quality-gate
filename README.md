@@ -115,7 +115,7 @@ python runner/aggregate.py --modrelease modrelease.json --workbench workbench.js
 
 ## Платный Pro-набор
 
-Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition v1.0.10** — отдельный Windows-пакет; его архив и pins сканеров выпускаются отдельно. Последний опубликованный GitHub Release Action — v1.0.70; текущий тег Action — v1.0.71, со сканером ModRelease Studio v0.3.86. Обновление бесплатной версии не обновляет Pro-пакет. [Информация о Pro на Boosty](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). CLI доступен в этом репозитории.
+Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition v1.0.10** — отдельный Windows-пакет; его архив и pins сканеров выпускаются отдельно. Последний опубликованный GitHub Release Action — v1.0.71; текущий тег Action — v1.0.71, со сканером ModRelease Studio v0.3.86. Обновление бесплатной версии не обновляет Pro-пакет. [Информация о Pro на Boosty](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). CLI доступен в этом репозитории.
 
 Подробнее о бесплатной версии и релизах: [открытый анонс](https://boosty.to/azizazimov/posts/b17a51a0-9dbf-4427-b810-700cfbfef3ab).
 

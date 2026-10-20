@@ -243,9 +243,9 @@ class AggregateTests(unittest.TestCase):
 class DocumentationConsistencyTests(unittest.TestCase):
     def test_readme_only_names_the_published_action_release(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("Последний опубликованный GitHub Release Action — v1.0.70", readme)
+        self.assertIn("Последний опубликованный GitHub Release Action — v1.0.71", readme)
         self.assertIn(f"текущий тег Action — v{VERSION}", readme)
-        self.assertNotIn(f"Последний опубликованный GitHub Release Action — v{VERSION}", readme)
+        self.assertIn(f"Последний опубликованный GitHub Release Action — v{VERSION}", readme)
 
     def test_release_workflow_publishes_only_after_repository_checks(self):
         workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
