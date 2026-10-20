@@ -119,7 +119,28 @@ jobs:
               assert all(value not in rendered for rendered in reports)
           PY
       - name: Assert exact installed Paradox Mod Workbench version
-        run: python -c 'from importlib.metadata import version; actual = version("paradox-mod-workbench"); print(f"paradox-mod-workbench {actual}"); assert actual == "0.2.9", actual'
+        run: python -c 'from importlib.metadata import version; actual = version("paradox-mod-workbench"); print(f"paradox-mod-workbench {actual}"); assert actual == "0.2.10", actual'
+      - name: Verify Workbench handles a deep dependency graph
+        run: |
+          python - <<'PY'
+          from paradox_mod_workbench.diagnostics import dependency_findings
+          from paradox_mod_workbench.model import ModInput
+
+          count = 1200
+          mods = [
+              ModInput(
+                  name=f"Mod {index}",
+                  source=f"mod-{index}",
+                  files=[],
+                  findings=[],
+                  declared_name=f"mod-{index}",
+                  dependencies=[f"mod-{index + 1}"] if index + 1 < count else ["mod-0"],
+              )
+              for index in range(count)
+          ]
+          findings = dependency_findings(mods)
+          assert [item.code for item in findings] == ["DEPENDENCY_CYCLE"], findings
+          PY
       - name: Verify installed scanner traversal policy
         run: |
           python - <<'PYCODE'
