@@ -44,7 +44,41 @@ jobs:
           assert any(item["level"] == "error" for item in report["runs"][0]["results"])
           PY
       - name: Assert exact installed ModRelease Studio version
-        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.88", actual'
+        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.89", actual'
+      - name: Create a cross-file localization collision fixture
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root = Path(".ci-localization-collision")
+          english = root / "localisation" / "english"
+          english.mkdir(parents=True, exist_ok=True)
+          (root / "descriptor.mod").write_text('name = "CI localization fixture"\n', encoding="utf-8")
+          (english / "first.yml").write_text('l_english:\nshared_key:0 "First value"\n', encoding="utf-8")
+          (english / "second.yml").write_text('l_english:\nshared_key:0 "Second value"\n', encoding="utf-8")
+          PY
+      - name: Verify the gate aggregates cross-file localization warnings
+        id: localization-collision
+        uses: ./
+        with:
+          mod-path: .ci-localization-collision
+          gate: error
+          artifact-name: localization-collision-report
+      - name: Assert the localization warning is visible and non-blocking
+        env:
+          JSON_REPORT: ${{ steps.localization-collision.outputs['json-report'] }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          report = json.loads(Path(os.environ["JSON_REPORT"]).read_text(encoding="utf-8"))
+          matches = [item for item in report["findings"] if item["code"] == "DUPLICATE_LOCALIZATION_KEY"]
+          assert len(matches) == 1, matches
+          assert matches[0]["source"] == "ModRelease Studio"
+          assert matches[0]["severity"] == "warning"
+          assert matches[0]["path"] == "localisation/english/second.yml:2"
+          assert report["counts"]["warning"] >= 1, report["counts"]
+          assert report["counts"]["error"] == 0, report["counts"]
+          PY
       - name: Create a mixed-secret integration fixture
         run: |
           python - <<'PY'
