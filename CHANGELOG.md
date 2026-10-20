@@ -9,6 +9,7 @@
 
 - Pin the free GitHub Action and CLI example to ModRelease Studio v0.3.86, including normalized repository-relative SARIF prefixes.
 - Keep the separately distributed Pro archive and its scanner pins unchanged.
+- Mark v1.0.71 as the latest formal GitHub Release after publication.
 
 ## 1.0.70 - 2026-10-20
 
