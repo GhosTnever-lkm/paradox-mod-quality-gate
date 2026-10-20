@@ -241,12 +241,17 @@ class AggregateTests(unittest.TestCase):
 
 
 class DocumentationConsistencyTests(unittest.TestCase):
-    def test_readme_only_names_the_published_action_release(self):
+    def test_readme_distinguishes_quality_gate_and_scanner_action_releases(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("Последний опубликованный GitHub Release Action — v1.0.74", readme)
+        self.assertIn(
+            "https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/releases/tag/v1.0.74",
+            readme,
+        )
+        self.assertIn(
+            "https://github.com/GhosTnever-lkm/modrelease-studio-action/releases/tag/v1.0.71",
+            readme,
+        )
         self.assertIn("v0.3.89", readme)
-        self.assertIn(f"текущий тег Action — v{VERSION}", readme)
-        self.assertIn(f"Последний опубликованный GitHub Release Action — v{VERSION}", readme)
 
     def test_release_workflow_publishes_only_after_repository_checks(self):
         workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
