@@ -107,7 +107,7 @@ jobs:
 
 ```powershell
 python -m pip install "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.89"
-python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.8"
+python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.9"
 modrelease scan . --json-out modrelease.json --md-out modrelease.md
 pmw scan . --format json --output workbench.json
 python runner/aggregate.py --modrelease modrelease.json --workbench workbench.json --json-out report.json --md-out report.md --sarif-out report.sarif --gate error
