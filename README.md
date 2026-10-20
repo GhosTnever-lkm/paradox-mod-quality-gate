@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.69
+      - uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.70
         with:
           mod-path: .
           gate: error
@@ -56,7 +56,7 @@ jobs:
 Передайте `config-file` с TOML-политикой ModRelease Studio, чтобы включить проверки обязательных путей. Путь должен быть внутри checkout. `ERROR`-находка попадёт в общий отчёт и заблокирует стандартный `gate: error`; прошедшая политика не блокирует запуск. CI проверяет это на фикстуре с намеренно отсутствующим файлом.
 
 ```yaml
-- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.69
+- uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.70
   with:
     mod-path: path/to/mod
     config-file: path/to/mod/modrelease.toml
@@ -89,7 +89,7 @@ jobs:
       - uses: actions/checkout@v7
       - name: Check mod release
         id: quality
-        uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.69
+        uses: GhosTnever-lkm/paradox-mod-quality-gate@v1.0.70
         with:
           mod-path: .
           gate: error
@@ -106,7 +106,7 @@ jobs:
 ## Локальное использование
 
 ```powershell
-python -m pip install "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.84"
+python -m pip install "modrelease-studio @ git+https://github.com/GhosTnever-lkm/modrelease-studio.git@v0.3.85"
 python -m pip install "paradox-mod-workbench @ git+https://github.com/GhosTnever-lkm/paradox-mod-workbench.git@v0.2.8"
 modrelease scan . --json-out modrelease.json --md-out modrelease.md
 pmw scan . --format json --output workbench.json
@@ -115,7 +115,7 @@ python runner/aggregate.py --modrelease modrelease.json --workbench workbench.js
 
 ## Платный Pro-набор
 
-Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition v1.0.10** — отдельный Windows-пакет; его архив и pins сканеров выпускаются отдельно. Последний опубликованный GitHub Release Action — v1.0.68; текущий тег Action — v1.0.69, со сканером ModRelease Studio v0.3.84. Обновление бесплатной версии не обновляет Pro-пакет. [Информация о Pro на Boosty](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). CLI доступен в этом репозитории.
+Бесплатная GitHub Action и CLI-режим остаются открытыми. **Pro Edition v1.0.10** — отдельный Windows-пакет; его архив и pins сканеров выпускаются отдельно. Последний опубликованный GitHub Release Action — v1.0.68; текущий тег Action — v1.0.70, со сканером ModRelease Studio v0.3.85. Обновление бесплатной версии не обновляет Pro-пакет. [Информация о Pro на Boosty](https://boosty.to/azizazimov/posts/761380dd-5d2d-45d1-ad6d-452b123d11b3). CLI доступен в этом репозитории.
 
 Подробнее о бесплатной версии и релизах: [открытый анонс](https://boosty.to/azizazimov/posts/b17a51a0-9dbf-4427-b810-700cfbfef3ab).
 
