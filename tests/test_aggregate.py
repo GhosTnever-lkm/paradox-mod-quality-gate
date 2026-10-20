@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MODRELEASE_VERSION = "0.3.85"
+MODRELEASE_VERSION = "0.3.86"
 sys.path.insert(0, str(ROOT / "runner"))
 from aggregate import VERSION, _annotation, json_report, markdown, normalize, sarif_report  # noqa: E402
 from workspace import resolve_workspace_path  # noqa: E402
@@ -245,7 +245,7 @@ class DocumentationConsistencyTests(unittest.TestCase):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("Последний опубликованный GitHub Release Action — v1.0.70", readme)
         self.assertIn(f"текущий тег Action — v{VERSION}", readme)
-        self.assertIn(f"Последний опубликованный GitHub Release Action — v{VERSION}", readme)
+        self.assertNotIn(f"Последний опубликованный GitHub Release Action — v{VERSION}", readme)
 
     def test_release_workflow_publishes_only_after_repository_checks(self):
         workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
