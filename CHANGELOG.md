@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Pin the free GitHub Action and CLI example to Paradox Mod Workbench v0.2.9, including folder symlink traversal protection.
 - Correct the release section so the Quality Gate and ModRelease Gate Action versions are identified and linked separately.
 - Refresh the Windows Pro bundle to v1.0.10 and pin its launcher to ModRelease Studio v0.3.82 and Paradox Mod Workbench v0.2.8.
 - Add regressions that keep Pro package metadata and scanner pins aligned.
