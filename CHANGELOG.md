@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 1.0.75 - 2026-10-20
+
+- Pin the free Action and CLI example to ModRelease Studio v0.3.90, including blocking detection when indexed ZIP archives change.
+- Publish the current free Action and docs as Paradox Mod Quality Gate v1.0.75; update the related ModRelease Gate link to v1.0.72.
+
 - Pin the free GitHub Action and CLI example to Paradox Mod Workbench v0.2.10, with a CI regression for deep dependency-cycle handling.
 - Correct the release section so the Quality Gate and ModRelease Gate Action versions are identified and linked separately.
 - Refresh the Windows Pro bundle to v1.0.10 and pin its launcher to ModRelease Studio v0.3.82 and Paradox Mod Workbench v0.2.8.

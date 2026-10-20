@@ -44,7 +44,7 @@ jobs:
           assert any(item["level"] == "error" for item in report["runs"][0]["results"])
           PY
       - name: Assert exact installed ModRelease Studio version
-        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.89", actual'
+        run: python -c 'from importlib.metadata import version; actual = version("modrelease-studio"); print(f"modrelease-studio {actual}"); assert actual == "0.3.90", actual'
       - name: Create a cross-file localization collision fixture
         run: |
           python - <<'PY'

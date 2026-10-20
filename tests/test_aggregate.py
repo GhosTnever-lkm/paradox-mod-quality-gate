@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MODRELEASE_VERSION = "0.3.89"
+MODRELEASE_VERSION = "0.3.90"
 sys.path.insert(0, str(ROOT / "runner"))
 from aggregate import VERSION, _annotation, json_report, markdown, normalize, sarif_report  # noqa: E402
 from workspace import resolve_workspace_path  # noqa: E402
@@ -244,14 +244,14 @@ class DocumentationConsistencyTests(unittest.TestCase):
     def test_readme_distinguishes_quality_gate_and_scanner_action_releases(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn(
-            "https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/releases/tag/v1.0.74",
+            "https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/releases/tag/v1.0.75",
             readme,
         )
         self.assertIn(
-            "https://github.com/GhosTnever-lkm/modrelease-studio-action/releases/tag/v1.0.71",
+            "https://github.com/GhosTnever-lkm/modrelease-studio-action/releases/tag/v1.0.72",
             readme,
         )
-        self.assertIn("v0.3.89", readme)
+        self.assertIn("v0.3.90", readme)
 
     def test_release_workflow_publishes_only_after_repository_checks(self):
         workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
