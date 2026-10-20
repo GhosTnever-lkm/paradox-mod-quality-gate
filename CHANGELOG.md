@@ -7,6 +7,7 @@
 
 ## 1.0.73 - 2026-10-20
 
+- Mark v1.0.73 as the latest formal GitHub Release after publication.
 - Pin the free GitHub Action and CLI to ModRelease Studio v0.3.88, including the directory-entry scan limit fix.
 - Keep the separately distributed Pro package and its scanner pins unchanged.
 
