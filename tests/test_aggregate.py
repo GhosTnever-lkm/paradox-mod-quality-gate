@@ -244,7 +244,7 @@ class DocumentationConsistencyTests(unittest.TestCase):
     def test_readme_distinguishes_quality_gate_and_scanner_action_releases(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn(
-            "https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/releases/tag/v1.0.75",
+            "https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/releases/tag/v1.0.76",
             readme,
         )
         self.assertIn(
@@ -274,12 +274,12 @@ class DocumentationConsistencyTests(unittest.TestCase):
         self.assertGreaterEqual(readme.count("actions/checkout@v7"), 2)
 
     def test_free_workbench_pin_matches_the_current_release(self):
-        pin = "paradox-mod-workbench.git@v0.2.10"
+        pin = "paradox-mod-workbench.git@v0.2.13"
         for relative in ("action.yml", "README.md"):
             with self.subTest(path=relative):
                 self.assertIn(pin, (ROOT / relative).read_text(encoding="utf-8"))
         ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-        self.assertIn('assert actual == "0.2.10"', ci)
+        self.assertIn('assert actual == "0.2.13"', ci)
         self.assertIn("Verify Workbench handles a deep dependency graph", ci)
 
     def test_pro_bundle_uses_current_workbench_release(self):
