@@ -119,7 +119,7 @@ jobs:
               assert all(value not in rendered for rendered in reports)
           PY
       - name: Assert exact installed Paradox Mod Workbench version
-        run: python -c 'from importlib.metadata import version; actual = version("paradox-mod-workbench"); print(f"paradox-mod-workbench {actual}"); assert actual == "0.2.10", actual'
+        run: python -c 'from importlib.metadata import version; actual = version("paradox-mod-workbench"); print(f"paradox-mod-workbench {actual}"); assert actual == "0.2.13", actual'
       - name: Verify Workbench handles a deep dependency graph
         run: |
           python - <<'PY'

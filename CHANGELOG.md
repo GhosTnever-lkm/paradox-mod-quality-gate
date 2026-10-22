@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pin the free Action, CI install, and CLI example to Paradox Mod Workbench v0.2.13 so downstream runs receive the duplicate-name dependency ambiguity fix.
+
 ## 1.0.75 - 2026-10-20
 
 - Pin the free Action and CLI example to ModRelease Studio v0.3.90, including blocking detection when indexed ZIP archives change.
