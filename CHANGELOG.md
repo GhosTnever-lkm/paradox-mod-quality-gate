@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 1.0.78 - 2026-10-23
+
+- Pin the free Action, CLI example, and Windows Pro bundle to Paradox Mod Workbench v0.2.14, including graceful handling of corrupt ZIP DEFLATE streams.
+- Bump the Pro source version to 1.0.12; no Pro ZIP is attached to the public release.
+
 ## 1.0.77 - 2026-10-23
 
 - Pin the free Action, CI install, and CLI example to Paradox Mod Workbench v0.2.13 so downstream runs receive the duplicate-name dependency ambiguity fix.
