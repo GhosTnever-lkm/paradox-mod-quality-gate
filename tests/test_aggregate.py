@@ -275,12 +275,12 @@ class DocumentationConsistencyTests(unittest.TestCase):
         self.assertGreaterEqual(readme.count("actions/checkout@v7"), 2)
 
     def test_free_workbench_pin_matches_the_current_release(self):
-        pin = "paradox-mod-workbench.git@v0.2.13"
+        pin = "paradox-mod-workbench.git@v0.2.14"
         for relative in ("action.yml", "README.md"):
             with self.subTest(path=relative):
                 self.assertIn(pin, (ROOT / relative).read_text(encoding="utf-8"))
         ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-        self.assertIn('assert actual == "0.2.13"', ci)
+        self.assertIn('assert actual == "0.2.14"', ci)
         self.assertIn("Verify Workbench handles a deep dependency graph", ci)
 
     def test_pro_bundle_scanner_pins_match_free_action_releases(self):
