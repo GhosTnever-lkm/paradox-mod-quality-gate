@@ -16,20 +16,21 @@ class ProPackageTests(unittest.TestCase):
     def test_builds_versioned_allowlisted_archive_and_checksum(self):
         with tempfile.TemporaryDirectory() as temp:
             archive_path, sidecar_path = package_pro(Path(temp))
-            self.assertEqual(archive_path.name, "Paradox-Mod-Quality-Gate-Pro-v1.0.10.zip")
+            pro_version = (ROOT / "pro/VERSION").read_text(encoding="utf-8").strip()
+            self.assertEqual(archive_path.name, f"Paradox-Mod-Quality-Gate-Pro-v{pro_version}.zip")
             with zipfile.ZipFile(archive_path) as archive:
                 self.assertIsNone(archive.testzip())
                 self.assertEqual(set(archive.namelist()), set(PACKAGE_FILES))
                 self.assertEqual(archive.read("VERSION").decode().strip(), (ROOT / "VERSION").read_text(encoding="utf-8").strip())
-                self.assertEqual(archive.read("pro/VERSION").decode().strip(), "1.0.10")
+                self.assertEqual(archive.read("pro/VERSION").decode().strip(), pro_version)
                 launcher = archive.read("pro/Start-Pro.ps1").decode()
-                self.assertIn("modrelease-studio.git@v0.3.82", launcher)
-                self.assertIn("paradox-mod-workbench.git@v0.2.8", launcher)
-                self.assertIn("ModRelease Studio v0.3.82", archive.read("pro/README.md").decode())
+                self.assertIn("modrelease-studio.git@v0.3.90", launcher)
+                self.assertIn("paradox-mod-workbench.git@v0.2.13", launcher)
+                self.assertIn("ModRelease Studio v0.3.90", archive.read("pro/README.md").decode())
                 pro_readme = archive.read("pro/README.md").decode()
                 self.assertIn("Start-Pro.ps1 -SkipInstall", pro_readme)
                 self.assertIn("first launch", pro_readme.lower())
-                self.assertIn("Version: **1.0.10**", pro_readme)
+                self.assertIn(f"Version: **{pro_version}**", pro_readme)
             digest = hashlib.sha256(archive_path.read_bytes()).hexdigest()
             self.assertEqual(sidecar_path.read_text(encoding="ascii"), f"{digest}  {archive_path.name}\n")
 
