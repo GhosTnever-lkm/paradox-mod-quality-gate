@@ -1,4 +1,5 @@
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -244,7 +245,7 @@ class DocumentationConsistencyTests(unittest.TestCase):
     def test_readme_distinguishes_quality_gate_and_scanner_action_releases(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn(
-            "https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/releases/tag/v1.0.76",
+            f"https://github.com/GhosTnever-lkm/paradox-mod-quality-gate/releases/tag/v{VERSION}",
             readme,
         )
         self.assertIn(
@@ -282,11 +283,23 @@ class DocumentationConsistencyTests(unittest.TestCase):
         self.assertIn('assert actual == "0.2.13"', ci)
         self.assertIn("Verify Workbench handles a deep dependency graph", ci)
 
-    def test_pro_bundle_uses_current_workbench_release(self):
+    def test_pro_bundle_scanner_pins_match_free_action_releases(self):
+        action = (ROOT / "action.yml").read_text(encoding="utf-8")
         launcher = (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8")
         pro_readme = (ROOT / "pro/README.md").read_text(encoding="utf-8")
-        self.assertIn("paradox-mod-workbench.git@v0.2.8", launcher)
-        self.assertIn("Paradox Mod Workbench v0.2.8", pro_readme)
+        for package, display_name in (
+            ("modrelease-studio", "ModRelease Studio"),
+            ("paradox-mod-workbench", "Paradox Mod Workbench"),
+        ):
+            with self.subTest(package=package):
+                marker = f"{package}.git@v"
+                action_match = re.search(re.escape(marker) + r"([0-9]+(?:\.[0-9]+){2})", action)
+                pro_match = re.search(re.escape(marker) + r"([0-9]+(?:\.[0-9]+){2})", launcher)
+                self.assertIsNotNone(action_match, f"{package} is not pinned in action.yml")
+                self.assertIsNotNone(pro_match, f"{package} is not pinned in Start-Pro.ps1")
+                version = action_match.group(1)
+                self.assertEqual(pro_match.group(1), version)
+                self.assertIn(f"{display_name} v{version}", pro_readme)
 
     def test_modrelease_pins_match_the_current_release(self):
         pin = f"modrelease-studio.git@v{MODRELEASE_VERSION}"
@@ -297,12 +310,6 @@ class DocumentationConsistencyTests(unittest.TestCase):
                 self.assertNotIn("modrelease-studio.git@v0.3.69", text)
         ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
         self.assertIn(f'assert actual == "{MODRELEASE_VERSION}"', ci)
-
-    def test_pro_bundle_documents_current_scanner_release(self):
-        launcher = (ROOT / "pro/Start-Pro.ps1").read_text(encoding="utf-8")
-        pro_readme = (ROOT / "pro/README.md").read_text(encoding="utf-8")
-        self.assertIn("modrelease-studio.git@v0.3.82", launcher)
-        self.assertIn("ModRelease Studio v0.3.82", pro_readme)
 
     def test_readme_does_not_publish_current_version_as_stale_example(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

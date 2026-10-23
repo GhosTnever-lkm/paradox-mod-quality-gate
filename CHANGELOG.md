@@ -2,7 +2,10 @@
 
 ## Unreleased
 
+## 1.0.77 - 2026-10-23
+
 - Pin the free Action, CI install, and CLI example to Paradox Mod Workbench v0.2.13 so downstream runs receive the duplicate-name dependency ambiguity fix.
+- Update the Windows Pro bundle to v1.0.11 and synchronize its scanner pins to ModRelease Studio v0.3.90 and Paradox Mod Workbench v0.2.13.
 
 ## 1.0.75 - 2026-10-20
 

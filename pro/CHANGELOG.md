@@ -1,5 +1,9 @@
 # Pro bundle changelog
 
+## 1.0.11 - 2026-10-23
+
+- Update the bundled scanners to ModRelease Studio v0.3.90 and Paradox Mod Workbench v0.2.13.
+
 ## 1.0.10 - 2026-10-20
 
 - Update the bundled scanners to ModRelease Studio v0.3.82 and Paradox Mod Workbench v0.2.8.
