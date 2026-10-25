@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 1.0.79 - 2026-10-25
+
+- Update the free composite Action and CLI instructions to the verified ModRelease Studio v0.3.91 release.
+- Synchronize the Windows Pro source bundle to ModRelease Studio v0.3.91 and bump its source version to 1.0.13; no Pro ZIP is attached to the public release.
+- Refresh the linked ModRelease Gate Action reference to v1.0.73.
+
 ## 1.0.78 - 2026-10-23
 
 - Pin the free Action, CLI example, and Windows Pro bundle to Paradox Mod Workbench v0.2.14, including graceful handling of corrupt ZIP DEFLATE streams.
