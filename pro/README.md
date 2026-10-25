@@ -1,6 +1,6 @@
 # Paradox Mod Quality Gate Pro Edition
 
-Version: **1.0.12**. This Windows convenience bundle runs the current free scanners: ModRelease Studio v0.3.90 and Paradox Mod Workbench v0.2.14.
+Version: **1.0.13**. This Windows convenience bundle runs the current free scanners: ModRelease Studio v0.3.91 and Paradox Mod Workbench v0.2.14.
 
 ## Included
 
